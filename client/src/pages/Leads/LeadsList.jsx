@@ -72,9 +72,9 @@ export default function LeadsList() {
         </div>
       ),
     },
-    { key: 'buyOrRent', label: 'Buy/Rent', sortable: true },
-    { key: 'configuration', label: 'Config' },
-    { key: 'areaNeed', label: 'Area', render: (row) => <span className="text-ink-muted truncate max-w-[160px] inline-block">{row.areaNeed}</span> },
+    { key: 'buyOrRent', label: 'Buy/Rent', sortable: true, className: 'hidden sm:table-cell' },
+    { key: 'configuration', label: 'Config', className: 'hidden sm:table-cell' },
+    { key: 'areaNeed', label: 'Area', className: 'hidden lg:table-cell', render: (row) => <span className="text-ink-muted truncate max-w-[160px] inline-block">{row.areaNeed}</span> },
     {
       key: 'leadStage', label: 'Stage', sortable: true,
       render: (row) => <StagePipeline stage={row.leadStage} compact />,
@@ -83,8 +83,8 @@ export default function LeadsList() {
       key: 'priority', label: 'Priority', sortable: true,
       render: (row) => <Badge variant={PRIORITY_COLORS[row.priority] || 'neutral'}>{row.priority || '—'}</Badge>,
     },
-    { key: 'leadManagedBy', label: 'Managed By' },
-    { key: 'nextFollowUpDate', label: 'Next Follow-up', sortable: true },
+    { key: 'leadManagedBy', label: 'Managed By', className: 'hidden md:table-cell' },
+    { key: 'nextFollowUpDate', label: 'Next Follow-up', sortable: true, className: 'hidden lg:table-cell' },
     {
       key: 'actions', label: '',
       render: (row) => (
@@ -109,7 +109,7 @@ export default function LeadsList() {
         </Button>
       </Topbar>
 
-      <div className="p-6 space-y-4 animate-fadeIn">
+      <div className="p-4 sm:p-6 space-y-4 animate-fadeIn">
         <Card padded={false} className="p-3">
           <div className="flex flex-wrap gap-2">
             {FILTER_DEFS.map((f) => (

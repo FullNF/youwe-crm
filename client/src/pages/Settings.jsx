@@ -123,7 +123,7 @@ export default function Settings() {
   return (
     <>
       <Topbar title="Settings" />
-      <div className="p-6 space-y-5 animate-fadeIn max-w-4xl">
+      <div className="p-4 sm:p-6 space-y-5 animate-fadeIn max-w-4xl">
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Shield size={16} className="text-accent" />

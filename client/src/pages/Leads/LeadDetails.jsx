@@ -81,11 +81,11 @@ export default function LeadDetails() {
   return (
     <>
       <Topbar title={lead.customerName}>
-        <Button variant="secondary" onClick={() => setEditOpen(true)}><Pencil size={14} /> Edit</Button>
-        <Button variant="danger" onClick={() => setDeleteOpen(true)}><Trash2 size={14} /> Delete</Button>
+        <Button variant="secondary" onClick={() => setEditOpen(true)}><Pencil size={14} /> <span className="hidden sm:inline">Edit</span></Button>
+        <Button variant="danger" onClick={() => setDeleteOpen(true)}><Trash2 size={14} /> <span className="hidden sm:inline">Delete</span></Button>
       </Topbar>
 
-      <div className="p-6 animate-fadeIn">
+      <div className="p-4 sm:p-6 animate-fadeIn">
         <button onClick={() => navigate('/leads')} className="flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink mb-4">
           <ArrowLeft size={14} /> Back to Leads
         </button>

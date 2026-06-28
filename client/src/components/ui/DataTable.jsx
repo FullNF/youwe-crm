@@ -28,7 +28,7 @@ export default function DataTable({ columns, rows, loading, sortBy, sortDir, onS
               <th
                 key={col.key}
                 onClick={() => col.sortable && onSort?.(col.key)}
-                className={`text-left text-xs font-medium text-ink-muted px-4 py-3 whitespace-nowrap ${col.sortable ? 'cursor-pointer select-none hover:text-ink' : ''}`}
+                className={`text-left text-xs font-medium text-ink-muted px-4 py-3 whitespace-nowrap ${col.sortable ? 'cursor-pointer select-none hover:text-ink' : ''} ${col.className || ''}`}
               >
                 <span className="inline-flex items-center gap-1">
                   {col.label}
@@ -50,7 +50,7 @@ export default function DataTable({ columns, rows, loading, sortBy, sortDir, onS
               className={`border-b border-surface-border/60 hover:bg-surface-hover transition-colors ${onRowClick ? 'cursor-pointer' : ''}`}
             >
               {columns.map((col) => (
-                <td key={col.key} className="px-4 py-3 text-ink align-middle">
+                <td key={col.key} className={`px-4 py-3 text-ink align-middle ${col.className || ''}`}>
                   {col.render ? col.render(row) : row[col.key]}
                 </td>
               ))}

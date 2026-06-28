@@ -63,7 +63,7 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
   return (
     <Modal open={open} onClose={onClose} title={isEdit ? 'Edit Lead' : 'Add Lead'} width="max-w-3xl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input label="Customer Name" required error={errors.customerName?.message} {...register('customerName', { required: 'Required' })} />
           <div>
             <Input
@@ -76,7 +76,7 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Select label="Buy or Rent" options={OPTIONS.BUY_OR_RENT} {...register('buyOrRent')} />
           <Select label="Customer Type" options={OPTIONS.CUST_TYPE} {...register('custType')} />
         </div>
@@ -87,29 +87,29 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
 
         <Input label="Area Need" placeholder="e.g. Sec. 70, Pyramid Altia and Nearby" {...register('areaNeed')} />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Select label="Property Condition" options={OPTIONS.PROPERTY_CONDITION} {...register('propertyCondition')} />
           <Select label="Configuration" options={OPTIONS.CONFIGURATION} {...register('configuration')} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input label="Budget / Bid Price (Purchase)" placeholder="e.g. 85Lac-1Cr." {...register('bidPricePurchase')} />
           <Input label="Budget / Bid Price (Rent)" placeholder="e.g. ₹20,000" {...register('bidPriceRent')} />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input label="Lead Managed By" {...register('leadManagedBy')} />
           <Input label="Visited Date" type="date" {...register('visitedDate')} />
           <Select label="Visit Status" options={OPTIONS.VISIT_STATUS} {...register('visitStatus')} />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Select label="Lead Stage" options={OPTIONS.LEAD_STAGE} {...register('leadStage')} />
           <Select label="Need Loan" options={OPTIONS.NEED_LOAN} {...register('needLoan')} />
           <Select label="Priority" options={OPTIONS.PRIORITY} {...register('priority')} />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Select label="Lead Source" options={OPTIONS.LEAD_SOURCE} {...register('leadSource')} />
           <Input label="Next Follow-up Date" type="date" {...register('nextFollowUpDate')} />
           <Input label="Last Contact Date" type="date" {...register('lastContactDate')} />

@@ -34,7 +34,7 @@ export default function Dashboard() {
   return (
     <>
       <Topbar title="Dashboard" />
-      <div className="p-6 space-y-6 animate-fadeIn">
+      <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 animate-fadeIn">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {CARD_DEFS.map(({ key, label, icon: Icon, tone }) => (
             <Card key={key} className="p-4">

@@ -17,12 +17,12 @@ export default function Reports() {
   return (
     <>
       <Topbar title="Reports">
-        <input type="date" className="input-base w-auto" onChange={(e) => setRange((r) => ({ ...r, from: e.target.value }))} />
-        <span className="text-ink-faint text-sm">to</span>
-        <input type="date" className="input-base w-auto" onChange={(e) => setRange((r) => ({ ...r, to: e.target.value }))} />
+        <input type="date" className="input-base w-auto min-w-0 shrink-0" onChange={(e) => setRange((r) => ({ ...r, from: e.target.value }))} />
+        <span className="text-ink-faint text-sm shrink-0">to</span>
+        <input type="date" className="input-base w-auto min-w-0 shrink-0" onChange={(e) => setRange((r) => ({ ...r, to: e.target.value }))} />
       </Topbar>
 
-      <div className="p-6 space-y-6 animate-fadeIn">
+      <div className="p-4 sm:p-6 space-y-6 animate-fadeIn">
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" onClick={() => downloadExport('excel')}><FileSpreadsheet size={14} /> Export Excel</Button>
           <Button variant="secondary" onClick={() => downloadExport('csv')}><Download size={14} /> Export CSV</Button>

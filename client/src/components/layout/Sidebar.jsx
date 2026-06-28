@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, Building2 } from 'lucide-react';
+import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, Building2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import api from '../../lib/api';
+import { useSidebar } from '../../context/SidebarContext';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -13,51 +14,69 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   const [needAttentionCount, setNeedAttentionCount] = useState(0);
+  const { isOpen, close } = useSidebar();
 
   useEffect(() => {
     api.get('/need-attention/count').then((res) => setNeedAttentionCount(res.data.data.count)).catch(() => {});
   }, []);
 
   return (
-    <aside className="w-60 shrink-0 h-screen sticky top-0 border-r border-surface-border bg-base-raised flex flex-col">
-      <div className="flex items-center gap-2.5 px-5 h-16 border-b border-surface-border">
-        <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-          <Building2 size={17} className="text-white" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-ink leading-tight">YouWe CRM</p>
-          <p className="text-[11px] text-ink-faint leading-tight">Lead Management</p>
-        </div>
-      </div>
+    <>
+      {/* Mobile backdrop - tapping it closes the drawer */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/60 z-40 md:hidden" onClick={close} />
+      )}
 
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {NAV_ITEMS.map(({ to, label, icon: Icon, badgeKey }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === '/'}
-            className={({ isActive }) =>
-              `flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive ? 'bg-accent/15 text-accent' : 'text-ink-muted hover:text-ink hover:bg-surface-hover'
-              }`
-            }
-          >
-            <span className="flex items-center gap-2.5">
-              <Icon size={16} />
-              {label}
-            </span>
-            {badgeKey === 'needAttention' && needAttentionCount > 0 && (
-              <span className="text-[11px] font-semibold bg-danger/20 text-danger rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
-                {needAttentionCount}
+      <aside
+        className={`fixed md:static top-0 left-0 z-50 w-64 md:w-60 shrink-0 h-screen md:h-screen border-r border-surface-border bg-base-raised flex flex-col
+          transform transition-transform duration-200 md:translate-x-0
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <div className="flex items-center justify-between gap-2.5 px-5 h-16 border-b border-surface-border">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+              <Building2 size={17} className="text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-ink leading-tight">YouWe CRM</p>
+              <p className="text-[11px] text-ink-faint leading-tight">Lead Management</p>
+            </div>
+          </div>
+          <button onClick={close} className="md:hidden text-ink-muted hover:text-ink p-1 -mr-1">
+            <X size={18} />
+          </button>
+        </div>
+
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+          {NAV_ITEMS.map(({ to, label, icon: Icon, badgeKey }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              onClick={close}
+              className={({ isActive }) =>
+                `flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isActive ? 'bg-accent/15 text-accent' : 'text-ink-muted hover:text-ink hover:bg-surface-hover'
+                }`
+              }
+            >
+              <span className="flex items-center gap-2.5">
+                <Icon size={16} />
+                {label}
               </span>
-            )}
-          </NavLink>
-        ))}
-      </nav>
+              {badgeKey === 'needAttention' && needAttentionCount > 0 && (
+                <span className="text-[11px] font-semibold bg-danger/20 text-danger rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
+                  {needAttentionCount}
+                </span>
+              )}
+            </NavLink>
+          ))}
+        </nav>
 
-      <div className="px-5 py-4 text-[11px] text-ink-faint border-t border-surface-border">
-        YouWe Group · Digifoc Pvt. Ltd.
-      </div>
-    </aside>
+        <div className="px-5 py-4 text-[11px] text-ink-faint border-t border-surface-border">
+          YouWe Group · Digifoc Pvt. Ltd.
+        </div>
+      </aside>
+    </>
   );
 }
