@@ -1,0 +1,20 @@
+const express = require('express');
+const leadsRoutes = require('./leads.routes');
+const dashboardRoutes = require('./dashboard.routes');
+const needAttentionRoutes = require('./needAttention.routes');
+const reportsRoutes = require('./reports.routes');
+const settingsRoutes = require('./settings.routes');
+const usersRoutes = require('./users.routes');
+
+const router = express.Router();
+
+router.get('/health', (req, res) => res.json({ success: true, status: 'ok', time: new Date().toISOString() }));
+
+router.use('/leads', leadsRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/need-attention', needAttentionRoutes);
+router.use('/reports', reportsRoutes);
+router.use('/settings', settingsRoutes);
+router.use('/users', usersRoutes);
+
+module.exports = router;
