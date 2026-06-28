@@ -66,4 +66,13 @@ function stageChangePayload(lead, fromStage, toStage, actorName) {
   };
 }
 
-module.exports = { notifyAll, newLeadPayload, stageChangePayload };
+/** Builds the message for a deleted lead. The lead is gone, so the link goes to the Leads list. */
+function deletedLeadPayload(lead, actorName) {
+  return {
+    title: 'Lead Deleted',
+    body: `${actorName} deleted a lead — ${lead.customerName}`,
+    url: '/leads',
+  };
+}
+
+module.exports = { notifyAll, newLeadPayload, stageChangePayload, deletedLeadPayload };

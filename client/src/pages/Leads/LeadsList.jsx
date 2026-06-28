@@ -10,6 +10,7 @@ import DataTable from '../../components/ui/DataTable';
 import Pagination from '../../components/ui/Pagination';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import StagePipeline from '../../components/ui/StagePipeline';
+import ContactActions from '../../components/ui/ContactActions';
 import { useLeads, deleteLead } from '../../hooks/useLeads';
 import { useDebounce } from '../../hooks/useDebounce';
 import { OPTIONS, STAGE_COLORS, PRIORITY_COLORS } from '../../constants/options';
@@ -68,7 +69,10 @@ export default function LeadsList() {
       render: (row) => (
         <div>
           <p className="font-medium text-ink">{row.customerName}</p>
-          <p className="text-xs text-ink-faint flex items-center gap-1"><Phone size={10} />{row.contactDetails}</p>
+          <div className="flex items-center gap-1">
+            <p className="text-xs text-ink-faint flex items-center gap-1"><Phone size={10} />{row.contactDetails}</p>
+            <ContactActions phone={row.contactDetails} />
+          </div>
         </div>
       ),
     },

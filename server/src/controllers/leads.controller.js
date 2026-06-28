@@ -117,8 +117,13 @@ const update = asyncHandler(async (req, res) => {
 });
 
 const remove = asyncHandler(async (req, res) => {
+  const existing = await leadsRepo.getById(req.params.id);
+  if (!existing) return fail(res, 'Lead not found', 404);
+
   const removed = await leadsRepo.remove(req.params.id);
   if (!removed) return fail(res, 'Lead not found', 404);
+
+  notificationsService.notifyAll(notificationsService.deletedLeadPayload(existing, req.user.name)).catch(() => {});
   return ok(res, { recordId: req.params.id, deleted: true });
 });
 

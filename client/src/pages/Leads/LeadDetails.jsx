@@ -10,18 +10,22 @@ import Skeleton from '../../components/ui/Skeleton';
 import StagePipeline from '../../components/ui/StagePipeline';
 import Timeline from '../../components/ui/Timeline';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
+import ContactActions from '../../components/ui/ContactActions';
 import { getLead, addRemark, deleteLead } from '../../hooks/useLeads';
 import { PRIORITY_COLORS } from '../../constants/options';
 import LeadFormModal from './LeadFormModal';
 
-function InfoRow({ icon: Icon, label, value }) {
+function InfoRow({ icon: Icon, label, value, action }) {
   return (
-    <div className="flex items-start gap-2.5 py-2">
-      <Icon size={14} className="text-ink-faint mt-0.5" />
-      <div>
-        <p className="text-xs text-ink-faint">{label}</p>
-        <p className="text-sm text-ink">{value || '—'}</p>
+    <div className="flex items-start justify-between gap-2.5 py-2">
+      <div className="flex items-start gap-2.5">
+        <Icon size={14} className="text-ink-faint mt-0.5" />
+        <div>
+          <p className="text-xs text-ink-faint">{label}</p>
+          <p className="text-sm text-ink">{value || '—'}</p>
+        </div>
       </div>
+      {action}
     </div>
   );
 }
@@ -101,7 +105,12 @@ export default function LeadDetails() {
                 <StagePipeline stage={lead.leadStage} />
               </div>
               <div className="divide-y divide-surface-border">
-                <InfoRow icon={Phone} label="Contact" value={lead.contactDetails} />
+                <InfoRow
+                  icon={Phone}
+                  label="Contact"
+                  value={lead.contactDetails}
+                  action={<ContactActions size="md" phone={lead.contactDetails} />}
+                />
                 <InfoRow icon={MapPin} label="Area Need" value={lead.areaNeed} />
                 <InfoRow icon={User} label="Lead Managed By" value={lead.leadManagedBy} />
                 <InfoRow icon={Calendar} label="Next Follow-up" value={lead.nextFollowUpDate} />
