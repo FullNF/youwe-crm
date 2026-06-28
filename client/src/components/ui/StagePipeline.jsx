@@ -16,6 +16,15 @@ export default function StagePipeline({ stage, compact = false }) {
     );
   }
 
+  if (stage === 'Hold') {
+    return (
+      <div className="flex items-center gap-1.5">
+        <span className="w-2 h-2 rounded-full bg-amber" />
+        <span className="text-xs text-amber font-medium">On Hold</span>
+      </div>
+    );
+  }
+
   const currentIndex = LEAD_STAGE_PIPELINE.indexOf(stage);
 
   return (

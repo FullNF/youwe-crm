@@ -59,7 +59,7 @@ function detectIssues(lead) {
     }
   }
 
-  if (lead.leadStage === 'Site Visit' && lead.visitStatus !== 'Done') {
+  if (lead.leadStage === 'Ready to Visit' && lead.visitStatus !== 'Done') {
     issues.push(ISSUE.VISIT_PENDING);
   }
   // Visit date has passed but never marked Done

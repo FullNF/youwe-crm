@@ -3,6 +3,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const { ok, created, fail } = require('../utils/apiResponse');
 const leadsRepo = require('../services/leads.repository');
 const timelineRepo = require('../services/timeline.repository');
+const notificationsService = require('../services/notifications.service');
 
 const leadSchema = z.object({
   customerName: z.string().min(1, 'Customer name is required'),
@@ -84,6 +85,7 @@ const create = asyncHandler(async (req, res) => {
   if (data.leadStage && data.leadStage !== 'New') {
     await timelineRepo.addEvent(lead.recordId, data.leadStage, `Stage set to ${data.leadStage}`, req.user.email);
   }
+  notificationsService.notifyAll(notificationsService.newLeadPayload(lead, req.user.name)).catch(() => {});
   return created(res, lead);
 });
 
@@ -97,6 +99,9 @@ const update = asyncHandler(async (req, res) => {
   // Append timeline events for meaningful changes - never overwrite, always append.
   if (patch.leadStage && patch.leadStage !== existing.leadStage) {
     await timelineRepo.addEvent(req.params.id, patch.leadStage, `Stage changed: ${existing.leadStage || '—'} → ${patch.leadStage}`, req.user.email);
+    notificationsService
+      .notifyAll(notificationsService.stageChangePayload(updated, existing.leadStage, patch.leadStage, req.user.name))
+      .catch(() => {});
   }
   if (patch.leadRemark && patch.leadRemark !== existing.leadRemark) {
     await timelineRepo.addEvent(req.params.id, 'Remark', patch.leadRemark, req.user.email);

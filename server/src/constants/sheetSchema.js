@@ -80,13 +80,22 @@ const SETTINGS_COLUMNS = [
   { key: 'settingValue', label: 'Value' },
 ];
 
+const PUSH_SUBSCRIPTIONS_COLUMNS = [
+  { key: 'id', label: 'ID' },
+  { key: 'userEmail', label: 'User Email' },
+  { key: 'endpoint', label: 'Endpoint' },
+  { key: 'p256dh', label: 'P256DH' },
+  { key: 'auth', label: 'Auth' },
+  { key: 'createdAt', label: 'Created At' },
+];
+
 const ENUMS = {
   BUY_OR_RENT: ['Buy', 'Rent'],
   CUST_TYPE: ['Individual', 'Investor', 'Builder', 'NRI', 'Corporate'],
   PROPERTY_CONDITION: ['Fully Furnished', 'Furnished', 'Semi-Furnished', 'Unfurnished', 'Raw'],
   CONFIGURATION: ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', 'Villa', 'Office', 'Shop'],
   VISIT_STATUS: ['Pending', 'Scheduled', 'Done', 'Cancelled'],
-  LEAD_STAGE: ['New', 'Contacted', 'Follow-up', 'Site Visit', 'Negotiation', 'Won', 'Lost'],
+  LEAD_STAGE: ['New', 'Contacted', 'Follow-up', 'Ready to Visit', 'Visit Done', 'Negotiation', 'Won', 'Lost', 'Hold'],
   NEED_LOAN: ['Yes', 'No'],
   LEAD_SOURCE: ['Facebook', 'Instagram', 'MagicBricks', '99acres', 'Reference', 'Walk-In', 'Website', 'Other'],
   PRIORITY: ['Hot', 'Warm', 'Cold'],
@@ -114,6 +123,7 @@ module.exports = {
   NEED_ATTENTION_COLUMNS,
   USERS_COLUMNS,
   SETTINGS_COLUMNS,
+  PUSH_SUBSCRIPTIONS_COLUMNS,
   ENUMS,
   NEED_ATTENTION_ISSUE_TYPES,
 };

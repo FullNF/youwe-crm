@@ -20,6 +20,7 @@ const env = {
   SHEET_TAB_NEED_ATTENTION: process.env.SHEET_TAB_NEED_ATTENTION || 'NeedAttention',
   SHEET_TAB_USERS: process.env.SHEET_TAB_USERS || 'Users',
   SHEET_TAB_SETTINGS: process.env.SHEET_TAB_SETTINGS || 'Settings',
+  SHEET_TAB_PUSH_SUBSCRIPTIONS: process.env.SHEET_TAB_PUSH_SUBSCRIPTIONS || 'PushSubscriptions',
 
   GOOGLE_SERVICE_ACCOUNT_EMAIL: required('GOOGLE_SERVICE_ACCOUNT_EMAIL'),
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: (process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
@@ -30,6 +31,10 @@ const env = {
 
   SEED_ADMIN_EMAIL: process.env.SEED_ADMIN_EMAIL || '',
   SEED_ADMIN_NAME: process.env.SEED_ADMIN_NAME || 'Admin',
+
+  VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY || '',
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY || '',
+  VAPID_SUBJECT: process.env.VAPID_SUBJECT || 'mailto:admin@youwegroup.com',
 };
 
 module.exports = env;

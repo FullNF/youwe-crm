@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Shield, Users, ListChecks, Image } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, ListChecks, Image, Bell, BellOff } from 'lucide-react';
 import Topbar from '../components/layout/Topbar';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -12,6 +12,7 @@ import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../hooks/useSettings';
 import api from '../lib/api';
 import { useEffect } from 'react';
+import { isPushSupported, getPushStatus, enablePushNotifications, disablePushNotifications } from '../lib/push';
 
 function ManageUsers() {
   const { isAdmin } = useAuth();
@@ -117,6 +118,74 @@ function DropdownEditor({ title, settingKey, settings, save }) {
   );
 }
 
+function NotificationsCard() {
+  const [status, setStatus] = useState('checking');
+  const [busy, setBusy] = useState(false);
+
+  const refresh = async () => {
+    if (!isPushSupported()) return setStatus('unsupported');
+    setStatus(await getPushStatus());
+  };
+
+  useEffect(() => { refresh(); }, []);
+
+  const handleEnable = async () => {
+    setBusy(true);
+    try {
+      await enablePushNotifications();
+      toast.success("Notifications on! You'll get an alert on new leads and stage changes.");
+      await refresh();
+    } catch (err) {
+      toast.error(err.message || 'Could not enable notifications.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleDisable = async () => {
+    setBusy(true);
+    try {
+      await disablePushNotifications();
+      toast.success('Notifications turned off on this device.');
+      await refresh();
+    } finally {
+      setBusy(false);
+      refresh();
+    }
+  };
+
+  return (
+    <Card>
+      <div className="flex items-center gap-2 mb-3">
+        <Bell size={16} className="text-accent" />
+        <h2 className="text-sm font-semibold text-ink">Notifications</h2>
+      </div>
+      <p className="text-sm text-ink-muted mb-4">
+        Get a real notification on this device whenever a new lead is added or a lead's stage changes
+        (e.g. "New &gt; Contacted (Vineet)"). Tapping a notification opens that lead directly.
+      </p>
+
+      {status === 'unsupported' && (
+        <p className="text-sm text-ink-faint">Your browser doesn't support push notifications.</p>
+      )}
+      {status === 'denied' && (
+        <p className="text-sm text-amber">
+          Notifications are blocked for this site in your browser settings. Enable them from your browser's site settings, then reload this page.
+        </p>
+      )}
+      {status === 'not-subscribed' && (
+        <Button onClick={handleEnable} loading={busy}><Bell size={14} /> Enable notifications on this device</Button>
+      )}
+      {status === 'subscribed' && (
+        <div className="flex items-center gap-3">
+          <Badge variant="success">Enabled on this device</Badge>
+          <Button variant="ghost" onClick={handleDisable} loading={busy}><BellOff size={14} /> Turn off</Button>
+        </div>
+      )}
+    </Card>
+  );
+}
+
 export default function Settings() {
   const { settings, loading, save } = useSettings();
 
@@ -124,6 +193,8 @@ export default function Settings() {
     <>
       <Topbar title="Settings" />
       <div className="p-4 sm:p-6 space-y-5 animate-fadeIn max-w-4xl">
+        <NotificationsCard />
+
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Shield size={16} className="text-accent" />

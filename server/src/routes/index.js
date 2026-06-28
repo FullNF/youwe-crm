@@ -5,6 +5,7 @@ const needAttentionRoutes = require('./needAttention.routes');
 const reportsRoutes = require('./reports.routes');
 const settingsRoutes = require('./settings.routes');
 const usersRoutes = require('./users.routes');
+const notificationsRoutes = require('./notifications.routes');
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use('/need-attention', needAttentionRoutes);
 router.use('/reports', reportsRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/users', usersRoutes);
+router.use('/notifications', notificationsRoutes);
 
 module.exports = router;
