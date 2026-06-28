@@ -11,7 +11,35 @@ const { notFound, errorHandler } = require('./middleware/error.middleware');
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
+
+// CLIENT_ORIGIN can be a comma-separated list (e.g. your custom domain +
+// localhost for local dev). On top of that, ANY *.vercel.app subdomain is
+// always allowed - Vercel gives every deployment (production and every
+// preview) a different URL, so hardcoding just one would break on the next
+// deploy. This keeps things working without having to update env vars here
+// every time Vercel generates a new URL.
+const explicitAllowedOrigins = (env.CLIENT_ORIGIN || '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) return callback(null, true); // non-browser requests (curl, health checks, server-to-server)
+      if (explicitAllowedOrigins.includes(origin)) return callback(null, true);
+      try {
+        const hostname = new URL(origin).hostname;
+        if (hostname.endsWith('.vercel.app')) return callback(null, true);
+      } catch {
+        // fall through to rejection below
+      }
+      return callback(new Error(`Origin "${origin}" is not allowed by CORS`));
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json({ limit: '2mb' }));
 app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
