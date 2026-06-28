@@ -95,7 +95,7 @@ export default function LeadDetails() {
             <Card>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-semibold text-ink">{lead.customerName}</h2>
-                <Badge variant={PRIORITY_COLORS[lead.priority] || 'neutral'}>{lead.priority || 'Warm'}</Badge>
+                <Badge variant={PRIORITY_COLORS[lead.priority] || 'neutral'} pulse={lead.priority === 'Hot'}>{lead.priority || 'Warm'}</Badge>
               </div>
               <div className="mb-3">
                 <StagePipeline stage={lead.leadStage} />

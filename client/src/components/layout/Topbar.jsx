@@ -1,5 +1,6 @@
 import { LogOut, ChevronDown, Menu } from 'lucide-react';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext';
@@ -18,7 +19,7 @@ export default function Topbar({ title, children }) {
   return (
     <header className="border-b border-surface-border sticky top-0 bg-base/95 backdrop-blur z-30">
       <div className="h-16 flex items-center gap-2 md:gap-3 px-3 md:px-6">
-        <button onClick={toggle} className="md:hidden text-ink-muted hover:text-ink p-1.5 -ml-1 rounded-md hover:bg-surface-hover shrink-0">
+        <button onClick={toggle} className="md:hidden text-ink-muted hover:text-ink p-1.5 -ml-1 rounded-md hover:bg-surface-hover transition-colors shrink-0">
           <Menu size={20} />
         </button>
 
@@ -32,26 +33,34 @@ export default function Topbar({ title, children }) {
             onClick={() => setMenuOpen((v) => !v)}
             className="flex items-center gap-2 pl-1.5 md:pl-2 pr-1.5 md:pr-2.5 py-1.5 rounded-lg hover:bg-surface-hover transition-colors"
           >
-            <div className="w-7 h-7 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-semibold shrink-0">
+            <div className="w-7 h-7 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-semibold shrink-0 transition-shadow duration-200 hover:shadow-glow-accent">
               {(profile?.name || profile?.email || '?').slice(0, 1).toUpperCase()}
             </div>
             <div className="text-left hidden sm:block">
               <p className="text-xs font-medium text-ink leading-tight">{profile?.name}</p>
               <p className="text-[11px] text-ink-faint leading-tight">{profile?.role}</p>
             </div>
-            <ChevronDown size={14} className="text-ink-faint hidden sm:block" />
+            <ChevronDown size={14} className={`text-ink-faint hidden sm:block transition-transform duration-200 ${menuOpen ? 'rotate-180' : ''}`} />
           </button>
 
-          {menuOpen && (
-            <div className="absolute right-0 mt-2 w-44 card p-1.5 z-40">
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-2 px-2.5 py-2 rounded-md text-sm text-ink-muted hover:text-danger hover:bg-danger/10 transition-colors"
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -4 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -4 }}
+                transition={{ duration: 0.14 }}
+                className="absolute right-0 mt-2 w-44 card p-1.5 z-40"
               >
-                <LogOut size={14} /> Sign out
-              </button>
-            </div>
-          )}
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2 px-2.5 py-2 rounded-md text-sm text-ink-muted hover:text-danger hover:bg-danger/10 transition-colors"
+                >
+                  <LogOut size={14} /> Sign out
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 

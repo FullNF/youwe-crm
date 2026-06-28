@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, Building2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import api from '../../lib/api';
 import { useSidebar } from '../../context/SidebarContext';
 
@@ -34,7 +35,7 @@ export default function Sidebar() {
       >
         <div className="flex items-center justify-between gap-2.5 px-5 h-16 border-b border-surface-border">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center shadow-glow-accent">
               <Building2 size={17} className="text-white" />
             </div>
             <div>
@@ -49,25 +50,35 @@ export default function Sidebar() {
 
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {NAV_ITEMS.map(({ to, label, icon: Icon, badgeKey }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === '/'}
-              onClick={close}
-              className={({ isActive }) =>
-                `flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ? 'bg-accent/15 text-accent' : 'text-ink-muted hover:text-ink hover:bg-surface-hover'
-                }`
-              }
-            >
-              <span className="flex items-center gap-2.5">
-                <Icon size={16} />
-                {label}
-              </span>
-              {badgeKey === 'needAttention' && needAttentionCount > 0 && (
-                <span className="text-[11px] font-semibold bg-danger/20 text-danger rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
-                  {needAttentionCount}
-                </span>
+            <NavLink key={to} to={to} end={to === '/'} onClick={close} className="relative block rounded-lg">
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="sidebar-active-pill"
+                      className="absolute inset-0 bg-accent/15 rounded-lg"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span
+                    className={`relative z-10 flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+                      isActive ? 'text-accent' : 'text-ink-muted hover:text-ink hover:bg-surface-hover'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Icon size={16} className={isActive ? 'drop-shadow-[0_0_6px_rgba(110,86,207,0.65)]' : ''} />
+                      {label}
+                    </span>
+                    {badgeKey === 'needAttention' && needAttentionCount > 0 && (
+                      <span className="relative inline-flex">
+                        <span className="absolute inset-0 rounded-full bg-danger/50 animate-ping" />
+                        <span className="relative text-[11px] font-semibold bg-danger/20 text-danger rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
+                          {needAttentionCount}
+                        </span>
+                      </span>
+                    )}
+                  </span>
+                </>
               )}
             </NavLink>
           ))}

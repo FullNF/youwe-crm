@@ -18,7 +18,21 @@ export default function App() {
         <Toaster
           position="top-right"
           toastOptions={{
-            style: { background: '#13151A', color: '#F0F1F3', border: '1px solid #22242C', fontSize: 13 },
+            style: {
+              background: '#13151A',
+              color: '#F0F1F3',
+              border: '1px solid #22242C',
+              fontSize: 13,
+              boxShadow: '0 1px 0 0 rgba(255,255,255,0.03) inset, 0 12px 32px -8px rgba(0,0,0,0.6)',
+            },
+            success: {
+              iconTheme: { primary: '#10B981', secondary: '#0A0B0F' },
+              style: { border: '1px solid rgba(16,185,129,0.35)' },
+            },
+            error: {
+              iconTheme: { primary: '#EF4444', secondary: '#0A0B0F' },
+              style: { border: '1px solid rgba(239,68,68,0.35)' },
+            },
           }}
         />
         <Routes>

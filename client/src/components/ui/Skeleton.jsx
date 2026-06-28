@@ -1,5 +1,5 @@
 export default function Skeleton({ className = '' }) {
-  return <div className={`animate-pulse rounded-md bg-surface-hover ${className}`} />;
+  return <div className={`skeleton-shimmer animate-shimmer rounded-md ${className}`} />;
 }
 
 export function SkeletonRows({ rows = 5, cols = 5 }) {

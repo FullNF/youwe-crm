@@ -29,25 +29,51 @@
 
 @layer components {
   .card {
-    @apply bg-surface border border-surface-border rounded-card shadow-card;
+    @apply bg-surface border border-surface-border rounded-card shadow-card transition-shadow duration-300;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5 hover:border-accent/30;
+  }
+  .glass {
+    background: rgba(19, 21, 26, 0.55);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
   }
   .input-base {
     @apply w-full bg-base border border-surface-border rounded-lg px-3 py-2 text-sm text-ink placeholder:text-ink-faint
-           focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors;
+           focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-150;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium px-3.5 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium px-3.5 py-2
+           transition-all duration-150 active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
   }
   .btn-primary {
-    @apply btn bg-accent text-white hover:bg-accent-hover;
+    @apply btn bg-accent text-white hover:bg-accent-hover hover:shadow-glow-accent relative overflow-hidden isolate;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 0.55s ease;
+    pointer-events: none;
+  }
+  .btn-primary:hover::after {
+    transform: translateX(130%);
   }
   .btn-secondary {
-    @apply btn bg-surface border border-surface-border text-ink hover:bg-surface-hover;
+    @apply btn bg-surface border border-surface-border text-ink hover:bg-surface-hover hover:border-accent/40 hover:-translate-y-px;
   }
   .btn-ghost {
     @apply btn bg-transparent text-ink-muted hover:text-ink hover:bg-surface-hover;
   }
   .btn-danger {
-    @apply btn bg-danger/10 text-danger hover:bg-danger/20 border border-danger/30;
+    @apply btn bg-danger/10 text-danger hover:bg-danger/20 hover:shadow-glow-danger border border-danger/30;
+  }
+  .skeleton-shimmer {
+    background-image: linear-gradient(90deg, #171a21 25%, #20232b 37%, #171a21 63%);
+    background-size: 400px 100%;
   }
 }

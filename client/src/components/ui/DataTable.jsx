@@ -47,10 +47,13 @@ export default function DataTable({ columns, rows, loading, sortBy, sortDir, onS
             <tr
               key={row.recordId || row.id}
               onClick={() => onRowClick?.(row)}
-              className={`border-b border-surface-border/60 hover:bg-surface-hover transition-colors ${onRowClick ? 'cursor-pointer' : ''}`}
+              className={`group relative border-b border-surface-border/60 hover:bg-surface-hover transition-colors duration-150 ${onRowClick ? 'cursor-pointer' : ''}`}
             >
-              {columns.map((col) => (
-                <td key={col.key} className={`px-4 py-3 text-ink align-middle ${col.className || ''}`}>
+              {columns.map((col, i) => (
+                <td key={col.key} className={`relative px-4 py-3 text-ink align-middle ${col.className || ''}`}>
+                  {i === 0 && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0 group-hover:w-[3px] h-5 bg-accent rounded-full transition-all duration-200" />
+                  )}
                   {col.render ? col.render(row) : row[col.key]}
                 </td>
               ))}

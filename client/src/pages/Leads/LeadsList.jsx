@@ -81,7 +81,7 @@ export default function LeadsList() {
     },
     {
       key: 'priority', label: 'Priority', sortable: true,
-      render: (row) => <Badge variant={PRIORITY_COLORS[row.priority] || 'neutral'}>{row.priority || '—'}</Badge>,
+      render: (row) => <Badge variant={PRIORITY_COLORS[row.priority] || 'neutral'} pulse={row.priority === 'Hot'}>{row.priority || '—'}</Badge>,
     },
     { key: 'leadManagedBy', label: 'Managed By', className: 'hidden md:table-cell' },
     { key: 'nextFollowUpDate', label: 'Next Follow-up', sortable: true, className: 'hidden lg:table-cell' },

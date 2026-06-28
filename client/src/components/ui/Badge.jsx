@@ -7,9 +7,18 @@ const VARIANT_CLASSES = {
   neutral: 'bg-surface-hover text-ink-muted border border-surface-border',
 };
 
-export default function Badge({ variant = 'neutral', children, className = '' }) {
+const PULSE_CLASS = {
+  danger: 'animate-dangerPulse',
+  amber: 'animate-glowPulse',
+  accent: 'animate-glowPulse',
+  success: '',
+  info: '',
+  neutral: '',
+};
+
+export default function Badge({ variant = 'neutral', children, className = '', pulse = false }) {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${VARIANT_CLASSES[variant] || VARIANT_CLASSES.neutral} ${className}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${VARIANT_CLASSES[variant] || VARIANT_CLASSES.neutral} ${pulse ? PULSE_CLASS[variant] || '' : ''} ${className}`}>
       {children}
     </span>
   );

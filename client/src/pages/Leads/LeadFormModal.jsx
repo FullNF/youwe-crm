@@ -6,6 +6,7 @@ import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
 import Textarea from '../../components/ui/Textarea';
 import Button from '../../components/ui/Button';
+import Confetti from '../../components/ui/Confetti';
 import { OPTIONS } from '../../constants/options';
 import { createLead, updateLead, checkDuplicatePhone } from '../../hooks/useLeads';
 
@@ -21,6 +22,7 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
   const isEdit = Boolean(lead);
   const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm({ defaultValues: EMPTY });
   const [dupeWarning, setDupeWarning] = useState(null);
+  const [celebrateKey, setCelebrateKey] = useState(0);
 
   useEffect(() => {
     if (open) reset(lead ? { ...EMPTY, ...lead } : EMPTY);
@@ -45,15 +47,23 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
 
   const onSubmit = async (data) => {
     try {
+      let result;
       if (isEdit) {
-        const updated = await updateLead(lead.recordId, data);
+        result = await updateLead(lead.recordId, data);
         toast.success('Lead updated');
-        onSaved?.(updated);
+        onSaved?.(result);
       } else {
-        const created = await createLead(data);
+        result = await createLead(data);
         toast.success('Lead created');
-        onSaved?.(created);
+        onSaved?.(result);
       }
+
+      const justWon = data.leadStage === 'Won' && (!isEdit || lead.leadStage !== 'Won');
+      if (justWon) {
+        setCelebrateKey((k) => k + 1);
+        toast.success('🎉 Deal won! Nice work.');
+      }
+
       onClose();
     } catch (err) {
       // toast already shown by axios interceptor
@@ -61,7 +71,9 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={isEdit ? 'Edit Lead' : 'Add Lead'} width="max-w-3xl">
+    <>
+      <Confetti trigger={celebrateKey} />
+      <Modal open={open} onClose={onClose} title={isEdit ? 'Edit Lead' : 'Add Lead'} width="max-w-3xl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input label="Customer Name" required error={errors.customerName?.message} {...register('customerName', { required: 'Required' })} />
@@ -129,5 +141,6 @@ export default function LeadFormModal({ open, onClose, lead, onSaved }) {
         </div>
       </form>
     </Modal>
+    </>
   );
 }
