@@ -25,11 +25,12 @@ const unsubscribe = asyncHandler(async (req, res) => {
 
 /** Manually fires a push notification to every subscribed device - handy for testing. */
 const sendTest = asyncHandler(async (req, res) => {
-  const { title, body, url } = req.body || {};
+  const { title, body, url, image } = req.body || {};
   const result = await notificationsService.notifyAll({
     title: title || 'Test Notification',
     body: body || `Sent by ${req.user.name} from Settings`,
     url: url || '/',
+    image: image || undefined,
   });
 
   if (!result.configured) {

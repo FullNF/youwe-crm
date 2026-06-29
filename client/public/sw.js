@@ -19,6 +19,9 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: payload.body,
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    image: payload.image || undefined,
     data: { url: payload.url || '/' },
     tag: payload.url || undefined, // collapses repeat notifications for the same lead instead of stacking endlessly
   };
