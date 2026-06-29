@@ -22,7 +22,7 @@ export default function Modal({ open, onClose, title, children, width = 'max-w-2
             onClick={onClose}
           />
           <motion.div
-            className={`relative w-full ${width} card p-0 max-h-[90vh] flex flex-col ring-1 ring-accent/10`}
+            className={`relative w-full ${width} glass rounded-card shadow-popover p-0 max-h-[90vh] flex flex-col ring-1 ring-accent/10`}
             initial={{ opacity: 0, scale: 0.97, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 8 }}

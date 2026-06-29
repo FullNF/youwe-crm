@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, Building2, X } from 'lucide-react';
+import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../lib/api';
@@ -29,14 +29,14 @@ export default function Sidebar() {
       )}
 
       <aside
-        className={`fixed md:static top-0 left-0 z-50 w-64 md:w-60 shrink-0 h-screen md:h-screen border-r border-surface-border bg-base-raised flex flex-col
+        className={`fixed md:static top-0 left-0 z-50 w-64 md:w-60 shrink-0 h-screen md:h-screen border-r border-surface-border glass flex flex-col
           transform transition-transform duration-200 md:translate-x-0
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="flex items-center justify-between gap-2.5 px-5 h-16 border-b border-surface-border">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center shadow-glow-accent">
-              <Building2 size={17} className="text-white" />
+          <div className="flex items-center gap-2.5 group cursor-default">
+            <div className="w-9 h-9 rounded-lg bg-white/95 flex items-center justify-center shadow-glow-accent transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 p-1">
+              <img src="/logo.png" alt="YouWe Group" className="w-full h-full object-contain" />
             </div>
             <div>
               <p className="text-sm font-semibold text-ink leading-tight">YouWe CRM</p>
@@ -50,7 +50,7 @@ export default function Sidebar() {
 
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {NAV_ITEMS.map(({ to, label, icon: Icon, badgeKey }) => (
-            <NavLink key={to} to={to} end={to === '/'} onClick={close} className="relative block rounded-lg">
+            <NavLink key={to} to={to} end={to === '/'} onClick={close} className="group relative block rounded-lg">
               {({ isActive }) => (
                 <>
                   {isActive && (
@@ -66,7 +66,7 @@ export default function Sidebar() {
                     }`}
                   >
                     <span className="flex items-center gap-2.5">
-                      <Icon size={16} className={isActive ? 'drop-shadow-[0_0_6px_rgba(110,86,207,0.65)]' : ''} />
+                      <Icon size={16} className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? 'drop-shadow-[0_0_6px_rgba(110,86,207,0.65)]' : ''}`} />
                       {label}
                     </span>
                     {badgeKey === 'needAttention' && needAttentionCount > 0 && (

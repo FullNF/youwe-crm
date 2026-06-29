@@ -17,7 +17,8 @@ export default function Topbar({ title, children }) {
   };
 
   return (
-    <header className="border-b border-surface-border sticky top-0 bg-base/95 backdrop-blur z-30">
+    <header className="glass sticky top-0 z-30 relative">
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/25 to-transparent" />
       <div className="h-16 flex items-center gap-2 md:gap-3 px-3 md:px-6">
         <button onClick={toggle} className="md:hidden text-ink-muted hover:text-ink p-1.5 -ml-1 rounded-md hover:bg-surface-hover transition-colors shrink-0">
           <Menu size={20} />

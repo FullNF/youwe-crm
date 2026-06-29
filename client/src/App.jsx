@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
@@ -12,6 +13,18 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
 export default function App() {
+  // Keep the service worker fresh on every visit. Without this, a browser
+  // that already has notifications enabled keeps running whatever Service
+  // Worker version it first installed (e.g. missing icons, old behavior)
+  // until something explicitly re-registers it - which previously only
+  // happened when someone clicked "Enable" again. This check on every load
+  // means fixes here actually reach people who already turned it on.
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>

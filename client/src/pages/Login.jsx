@@ -3,7 +3,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
-import { Building2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
@@ -59,8 +59,8 @@ export default function Login() {
           transition={{ duration: 0.4, delay: 0.05 }}
           className="flex flex-col items-center mb-8"
         >
-          <div className="w-11 h-11 rounded-xl bg-accent flex items-center justify-center mb-3 shadow-glow-accent">
-            <Building2 size={22} className="text-white" />
+          <div className="w-16 h-16 rounded-xl bg-white/95 flex items-center justify-center mb-3 shadow-glow-accent p-2">
+            <img src="/logo.png" alt="YouWe Group" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-lg font-semibold text-ink">YouWe CRM</h1>
           <p className="text-sm text-ink-muted">Sign in to manage your leads</p>

@@ -37,7 +37,7 @@ export default function ContactActions({ phone, size = 'sm', className = '' }) {
       <a
         href={callHref}
         title="Call"
-        className={`${pad} rounded-md text-info hover:bg-info/15 hover:shadow-[0_0_14px_rgba(59,130,246,0.35)] transition-all duration-150 active:scale-90`}
+        className={`${pad} rounded-md text-info hover:bg-info/15 hover:scale-110 hover:shadow-[0_0_14px_rgba(59,130,246,0.35)] transition-all duration-150 active:scale-90`}
       >
         <Phone size={iconSize} />
       </a>
@@ -47,7 +47,7 @@ export default function ContactActions({ phone, size = 'sm', className = '' }) {
         rel="noopener noreferrer"
         title="WhatsApp"
         style={{ color: '#25D366' }}
-        className={`${pad} rounded-md hover:bg-[#25D366]/15 transition-all duration-150 active:scale-90`}
+        className={`${pad} rounded-md hover:bg-[#25D366]/15 hover:scale-110 transition-all duration-150 active:scale-90`}
       >
         <MessageCircle size={iconSize} />
       </a>

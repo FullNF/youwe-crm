@@ -18,7 +18,7 @@ const PULSE_CLASS = {
 
 export default function Badge({ variant = 'neutral', children, className = '', pulse = false }) {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${VARIANT_CLASSES[variant] || VARIANT_CLASSES.neutral} ${pulse ? PULSE_CLASS[variant] || '' : ''} ${className}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap transition-transform duration-150 hover:scale-105 ${VARIANT_CLASSES[variant] || VARIANT_CLASSES.neutral} ${pulse ? PULSE_CLASS[variant] || '' : ''} ${className}`}>
       {children}
     </span>
   );

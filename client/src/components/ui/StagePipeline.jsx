@@ -38,7 +38,7 @@ export default function StagePipeline({ stage, compact = false }) {
           <div key={step} className="flex items-center">
             <div
               title={step}
-              className={`rounded-full transition-all duration-300 ${compact ? 'w-1.5 h-1.5' : 'w-2.5 h-2.5'} ${
+              className={`rounded-full transition-all duration-300 hover:scale-150 ${compact ? 'w-1.5 h-1.5' : 'w-2.5 h-2.5'} ${
                 stepIsWon
                   ? 'bg-success shadow-glow-success'
                   : reached
