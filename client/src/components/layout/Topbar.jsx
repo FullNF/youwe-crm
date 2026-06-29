@@ -50,7 +50,7 @@ export default function Topbar({ title, children }) {
                 initial={{ opacity: 0, scale: 0.95, y: -4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -4 }}
-                transition={{ duration: 0.14 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 className="absolute right-0 mt-2 w-44 card p-1.5 z-40"
               >
                 <button

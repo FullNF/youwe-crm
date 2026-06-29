@@ -35,10 +35,13 @@
 
 @layer components {
   .card {
-    @apply bg-surface border border-surface-border rounded-card shadow-card transition-shadow duration-300;
+    background: rgba(19, 21, 26, 0.68);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    @apply border border-white/[0.07] rounded-card shadow-card transition-all duration-300 relative;
   }
   .card-hover {
-    @apply card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5 hover:border-accent/30;
+    @apply card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-accent/35;
   }
   .glass {
     background: rgba(19, 21, 26, 0.55);
@@ -47,11 +50,11 @@
     border: 1px solid rgba(255, 255, 255, 0.07);
   }
   .input-base {
-    @apply w-full bg-base border border-surface-border rounded-lg px-3 py-2 text-sm text-ink placeholder:text-ink-faint
-           focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-150;
+    @apply w-full bg-base/80 border border-surface-border rounded-xl px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint
+           backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent focus:bg-base transition-all duration-150;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium px-3.5 py-2
+    @apply inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium px-4 py-2.5
            transition-all duration-150 active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
   }
   .btn-primary {

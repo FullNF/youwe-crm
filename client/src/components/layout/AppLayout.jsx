@@ -1,6 +1,7 @@
 import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from './Sidebar';
+import AmbientBackground from '../ui/AmbientBackground';
 import { SidebarProvider } from '../../context/SidebarContext';
 
 export default function AppLayout() {
@@ -9,7 +10,8 @@ export default function AppLayout() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-base">
+      <AmbientBackground />
+      <div className="flex min-h-screen bg-transparent">
         <Sidebar />
         <main className="flex-1 min-w-0">
           <AnimatePresence>
