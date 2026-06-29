@@ -10,7 +10,7 @@ import Button from '../../components/ui/Button';
 import { OPTIONS } from '../../constants/options';
 import { createProperty, updateProperty } from '../../hooks/useProperties';
 
-const EMPTY = { name: '', location: '', propertyType: '', description: '', media: [{ mediaType: 'Photo', driveLink: '', caption: '' }] };
+const EMPTY = { name: '', location: '', propertyType: '', furnishing: '', priceRange: '', description: '', media: [{ mediaType: 'Photo', driveLink: '', caption: '' }] };
 
 export default function PropertyFormModal({ open, property, onClose, onSaved }) {
   const isEdit = Boolean(property);
@@ -31,6 +31,8 @@ export default function PropertyFormModal({ open, property, onClose, onSaved }) 
           name: data.name,
           location: data.location,
           propertyType: data.propertyType,
+          furnishing: data.furnishing,
+          priceRange: data.priceRange,
           description: data.description,
         });
         toast.success('Property updated');
@@ -52,7 +54,11 @@ export default function PropertyFormModal({ open, property, onClose, onSaved }) 
           <Input label="Property Name" required placeholder="e.g. Pyramid Altia Tower 3" error={errors.name?.message} {...register('name', { required: 'Required' })} />
           <Input label="Location" required placeholder="e.g. Sector 70, Gurugram" error={errors.location?.message} {...register('location', { required: 'Required' })} />
         </div>
-        <Select label="Property Type" options={OPTIONS.CONFIGURATION} {...register('propertyType')} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Select label="Property Type" options={OPTIONS.CONFIGURATION} {...register('propertyType')} />
+          <Select label="Furnishing" options={OPTIONS.PROPERTY_CONDITION} {...register('furnishing')} />
+        </div>
+        <Input label="Price Range (optional)" placeholder="e.g. ₹22K/month or 85Lac-1Cr" {...register('priceRange')} />
         <Textarea label="Description (optional)" placeholder="Any notes about this property" {...register('description')} />
 
         {!isEdit && (

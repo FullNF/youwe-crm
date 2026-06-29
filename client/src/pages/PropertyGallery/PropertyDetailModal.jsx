@@ -123,6 +123,8 @@ export default function PropertyDetailModal({ propertyId, onClose, onChanged }) 
               <div className="flex items-center gap-2">
                 <p className="text-sm text-ink-muted flex items-center gap-1.5"><MapPin size={13} /> {property.location}</p>
                 {property.propertyType && <Badge variant="accent">{property.propertyType}</Badge>}
+                {property.furnishing && <Badge variant="neutral">{property.furnishing}</Badge>}
+                {property.priceRange && <Badge variant="success">{property.priceRange}</Badge>}
               </div>
               <Button onClick={handleShareProperty} variant="secondary">
                 <Share2 size={14} /> Share Property

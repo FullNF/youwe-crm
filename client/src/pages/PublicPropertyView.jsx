@@ -90,6 +90,8 @@ export default function PublicPropertyView() {
                     </p>
                   )}
                   {property.propertyType && <Badge variant="accent">{property.propertyType}</Badge>}
+                  {property.furnishing && <Badge variant="neutral">{property.furnishing}</Badge>}
+                  {property.priceRange && <Badge variant="success">{property.priceRange}</Badge>}
                 </div>
               </div>
               <Button onClick={handleShare}>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, MapPin, Image as ImageIcon, Video, Pencil, Trash2, Building2 } from 'lucide-react';
+import { Plus, MapPin, Image as ImageIcon, Video, Pencil, Trash2, Building2, Upload } from 'lucide-react';
 import Topbar from '../../components/layout/Topbar';
 import SearchInput from '../../components/layout/SearchInput';
 import Card from '../../components/ui/Card';
@@ -13,6 +13,7 @@ import { useProperties, useLocations, deleteProperty } from '../../hooks/useProp
 import { useDebounce } from '../../hooks/useDebounce';
 import { OPTIONS } from '../../constants/options';
 import PropertyFormModal from './PropertyFormModal';
+import BulkImportModal from './BulkImportModal';
 import PropertyDetailModal from './PropertyDetailModal';
 import toast from 'react-hot-toast';
 
@@ -22,6 +23,7 @@ export default function PropertyGalleryList() {
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [formOpen, setFormOpen] = useState(false);
+  const [bulkImportOpen, setBulkImportOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
   const [openPropertyId, setOpenPropertyId] = useState(null);
   const [deletingProperty, setDeletingProperty] = useState(null);
@@ -49,6 +51,9 @@ export default function PropertyGalleryList() {
           <option value="">All types</option>
           {OPTIONS.CONFIGURATION.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
+        <Button variant="secondary" onClick={() => setBulkImportOpen(true)}>
+          <Upload size={15} /> Bulk Import
+        </Button>
         <Button onClick={() => { setEditingProperty(null); setFormOpen(true); }}>
           <Plus size={15} /> Add Property
         </Button>
@@ -107,12 +112,16 @@ export default function PropertyGalleryList() {
                     <MapPin size={11} /> {p.location || 'No location'}
                   </p>
                   <div className="flex items-center justify-between mt-3">
-                    {p.propertyType ? <Badge variant="accent">{p.propertyType}</Badge> : <span />}
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {p.propertyType && <Badge variant="accent">{p.propertyType}</Badge>}
+                      {p.furnishing && <Badge variant="neutral">{p.furnishing}</Badge>}
+                    </div>
                     <div className="flex items-center gap-2.5 text-xs text-ink-muted">
                       <span className="flex items-center gap-1"><ImageIcon size={12} /> {p.mediaCounts?.photos || 0}</span>
                       <span className="flex items-center gap-1"><Video size={12} /> {p.mediaCounts?.videos || 0}</span>
                     </div>
                   </div>
+                  {p.priceRange && <p className="text-xs text-success font-medium mt-2">{p.priceRange}</p>}
                 </div>
               </Card>
             </motion.div>
@@ -125,6 +134,12 @@ export default function PropertyGalleryList() {
         property={editingProperty}
         onClose={() => setFormOpen(false)}
         onSaved={() => refetch()}
+      />
+
+      <BulkImportModal
+        open={bulkImportOpen}
+        onClose={() => setBulkImportOpen(false)}
+        onImported={() => refetch()}
       />
 
       <PropertyDetailModal
