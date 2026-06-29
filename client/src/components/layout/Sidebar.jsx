@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, X } from 'lucide-react';
+import { LayoutDashboard, Users2, AlertTriangle, BarChart3, Settings as SettingsIcon, Images, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../lib/api';
@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/leads', label: 'Leads', icon: Users2 },
   { to: '/need-attention', label: 'Need Attention', icon: AlertTriangle, badgeKey: 'needAttention' },
+  { to: '/property-gallery', label: 'Property Gallery', icon: Images },
   { to: '/reports', label: 'Reports', icon: BarChart3 },
   { to: '/settings', label: 'Settings', icon: SettingsIcon },
 ];

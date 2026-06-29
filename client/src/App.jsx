@@ -12,6 +12,7 @@ import LeadDetails from './pages/Leads/LeadDetails';
 import NeedAttention from './pages/NeedAttention';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import PropertyGalleryList from './pages/PropertyGallery/PropertyGalleryList';
 
 export default function App() {
   // Keep the service worker fresh on every visit. Without this, a browser
@@ -63,6 +64,7 @@ export default function App() {
               <Route path="/leads" element={<LeadsList />} />
               <Route path="/leads/:id" element={<LeadDetails />} />
               <Route path="/need-attention" element={<NeedAttention />} />
+              <Route path="/property-gallery" element={<PropertyGalleryList />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/settings" element={<Settings />} />
             </Route>

@@ -117,6 +117,27 @@ const NEED_ATTENTION_ISSUE_TYPES = {
   MISSING_LEAD_MANAGER: 'Missing Lead Manager',
 };
 
+const PROPERTIES_COLUMNS = [
+  { key: 'id', label: 'Property ID' },
+  { key: 'name', label: 'Property Name' },
+  { key: 'location', label: 'Location' },
+  { key: 'propertyType', label: 'Property Type' }, // 1 RK / 1 BHK / 2 BHK / Villa / Office / Shop ...
+  { key: 'description', label: 'Description' },
+  { key: 'createdBy', label: 'Created By' },
+  { key: 'createdAt', label: 'Created At' },
+];
+
+const PROPERTY_MEDIA_COLUMNS = [
+  { key: 'id', label: 'Media ID' },
+  { key: 'propertyId', label: 'Property ID' },
+  { key: 'mediaType', label: 'Media Type' }, // Photo | Video
+  { key: 'driveLink', label: 'Drive Link' }, // the raw link as pasted
+  { key: 'fileId', label: 'File ID' }, // extracted Google Drive file ID
+  { key: 'caption', label: 'Caption' },
+  { key: 'addedBy', label: 'Added By' },
+  { key: 'createdAt', label: 'Created At' },
+];
+
 module.exports = {
   LEADS_COLUMNS,
   TIMELINE_COLUMNS,
@@ -124,6 +145,8 @@ module.exports = {
   USERS_COLUMNS,
   SETTINGS_COLUMNS,
   PUSH_SUBSCRIPTIONS_COLUMNS,
+  PROPERTIES_COLUMNS,
+  PROPERTY_MEDIA_COLUMNS,
   ENUMS,
   NEED_ATTENTION_ISSUE_TYPES,
 };
