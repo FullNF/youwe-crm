@@ -9,6 +9,9 @@ import Select from '../../components/ui/Select';
 import { SkeletonRows } from '../../components/ui/Skeleton';
 import { getProperty, addPropertyMedia, deletePropertyMedia } from '../../hooks/useProperties';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const getStreamUrl = (mediaId) => `${API_BASE_URL}/public/media/${mediaId}/stream`;
+
 function MediaLightbox({ media, onClose }) {
   if (!media) return null;
   return (
@@ -23,7 +26,7 @@ function MediaLightbox({ media, onClose }) {
         <div className="rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
           {media.mediaType === 'Video' ? (
             <video
-              src={media.streamUrl}
+              src={getStreamUrl(media.id)}
               controls
               controlsList="nodownload noremoteplayback"
               autoPlay

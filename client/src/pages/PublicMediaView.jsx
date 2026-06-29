@@ -6,6 +6,8 @@ import api from '../lib/api';
 import Button from '../components/ui/Button';
 import AmbientBackground from '../components/ui/AmbientBackground';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
 export default function PublicMediaView() {
   const { mediaId } = useParams();
   const [media, setMedia] = useState(null);
@@ -62,7 +64,7 @@ export default function PublicMediaView() {
             <div className="aspect-video bg-black relative flex items-center justify-center">
               {media.mediaType === 'Video' ? (
                 <video
-                  src={media.streamUrl}
+                  src={`${API_BASE_URL}/public/media/${mediaId}/stream`}
                   controls
                   controlsList="nodownload noremoteplayback"
                   autoPlay
