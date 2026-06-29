@@ -122,6 +122,8 @@ const PROPERTIES_COLUMNS = [
   { key: 'name', label: 'Property Name' },
   { key: 'location', label: 'Location' },
   { key: 'propertyType', label: 'Property Type' }, // 1 RK / 1 BHK / 2 BHK / Villa / Office / Shop ...
+  { key: 'furnishing', label: 'Furnishing' }, // Fully Furnished / Semi-Furnished / Raw / Unfurnished
+  { key: 'priceRange', label: 'Price Range' },
   { key: 'description', label: 'Description' },
   { key: 'createdBy', label: 'Created By' },
   { key: 'createdAt', label: 'Created At' },

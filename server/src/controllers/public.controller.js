@@ -20,6 +20,8 @@ const getPublicProperty = asyncHandler(async (req, res) => {
     name: property.name,
     location: property.location,
     propertyType: property.propertyType,
+    furnishing: property.furnishing,
+    priceRange: property.priceRange,
     media: media.map((m) => ({
       id: m.id,
       mediaType: m.mediaType,

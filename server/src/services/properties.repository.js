@@ -22,6 +22,8 @@ async function create(payload, createdByEmail) {
     name: payload.name || '',
     location: payload.location || '',
     propertyType: payload.propertyType || '',
+    furnishing: payload.furnishing || '',
+    priceRange: payload.priceRange || '',
     description: payload.description || '',
     createdBy: createdByEmail || '',
     createdAt: nowIso(),
@@ -54,7 +56,7 @@ async function query({ search = '', location = '', propertyType = '' } = {}) {
   if (search && search.trim()) {
     const q = search.trim().toLowerCase();
     all = all.filter((p) =>
-      [p.name, p.location, p.propertyType, p.description].filter(Boolean).some((f) => String(f).toLowerCase().includes(q))
+      [p.name, p.location, p.propertyType, p.furnishing, p.priceRange, p.description].filter(Boolean).some((f) => String(f).toLowerCase().includes(q))
     );
   }
   if (location) all = all.filter((p) => p.location.toLowerCase() === location.toLowerCase());

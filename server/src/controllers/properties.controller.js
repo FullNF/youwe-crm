@@ -8,6 +8,8 @@ const propertySchema = z.object({
   name: z.string().min(1, 'Property name is required'),
   location: z.string().min(1, 'Location is required'),
   propertyType: z.string().optional().default(''),
+  furnishing: z.string().optional().default(''),
+  priceRange: z.string().optional().default(''),
   description: z.string().optional().default(''),
 });
 
