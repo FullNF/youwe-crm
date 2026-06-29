@@ -20,12 +20,14 @@ function ensureConfigured() {
  */
 async function notifyAll(payload) {
   ensureConfigured();
-  if (!configured) return;
+  if (!configured) return { total: 0, sent: 0, failed: 0, configured: false };
 
   const subs = await subsRepo.getAll();
-  if (!subs.length) return;
+  if (!subs.length) return { total: 0, sent: 0, failed: 0, configured: true };
 
   const json = JSON.stringify(payload);
+  let sent = 0;
+  let failed = 0;
 
   await Promise.all(
     subs.map(async (sub) => {
@@ -35,7 +37,9 @@ async function notifyAll(payload) {
       };
       try {
         await webpush.sendNotification(pushSubscription, json);
+        sent += 1;
       } catch (err) {
+        failed += 1;
         // 404/410 = the browser unsubscribed or the subscription expired - clean it up.
         if (err.statusCode === 404 || err.statusCode === 410) {
           await subsRepo.remove(sub.endpoint).catch(() => {});
@@ -45,6 +49,8 @@ async function notifyAll(payload) {
       }
     })
   );
+
+  return { total: subs.length, sent, failed, configured: true };
 }
 
 /** Builds the message for a brand-new lead. */

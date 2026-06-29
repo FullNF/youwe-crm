@@ -86,6 +86,9 @@ export default function Sidebar() {
 
         <div className="px-5 py-4 text-[11px] text-ink-faint border-t border-surface-border">
           YouWe Group · Digifoc Pvt. Ltd.
+          <span className="block text-ink-faint/60 mt-0.5" title={`Built ${typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : ''}`}>
+            build {typeof __BUILD_SHA__ !== 'undefined' ? __BUILD_SHA__ : 'dev'}
+          </span>
         </div>
       </aside>
     </>

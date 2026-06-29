@@ -2,6 +2,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const { ok, fail } = require('../utils/apiResponse');
 const env = require('../config/env');
 const subsRepo = require('../services/pushSubscriptions.repository');
+const notificationsService = require('../services/notifications.service');
 
 const getPublicKey = asyncHandler(async (req, res) => {
   if (!env.VAPID_PUBLIC_KEY) return fail(res, 'Push notifications are not configured on the server yet.', 503);
@@ -22,4 +23,22 @@ const unsubscribe = asyncHandler(async (req, res) => {
   return ok(res, { unsubscribed: true });
 });
 
-module.exports = { getPublicKey, subscribe, unsubscribe };
+/** Manually fires a push notification to every subscribed device - handy for testing. */
+const sendTest = asyncHandler(async (req, res) => {
+  const { title, body, url } = req.body || {};
+  const result = await notificationsService.notifyAll({
+    title: title || 'Test Notification',
+    body: body || `Sent by ${req.user.name} from Settings`,
+    url: url || '/',
+  });
+
+  if (!result.configured) {
+    return fail(res, 'Push notifications are not configured on the server yet (VAPID keys missing).', 503);
+  }
+  if (result.total === 0) {
+    return fail(res, 'No devices are subscribed to notifications yet. Enable notifications on at least one device first.', 422);
+  }
+  return ok(res, result);
+});
+
+module.exports = { getPublicKey, subscribe, unsubscribe, sendTest };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Shield, Users, ListChecks, Image, Bell, BellOff } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, ListChecks, Image, Bell, BellOff, Send } from 'lucide-react';
 import Topbar from '../components/layout/Topbar';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -119,8 +119,10 @@ function DropdownEditor({ title, settingKey, settings, save }) {
 }
 
 function NotificationsCard() {
+  const { isAdmin } = useAuth();
   const [status, setStatus] = useState('checking');
   const [busy, setBusy] = useState(false);
+  const [testBusy, setTestBusy] = useState(false);
 
   const refresh = async () => {
     if (!isPushSupported()) return setStatus('unsupported');
@@ -154,6 +156,22 @@ function NotificationsCard() {
     }
   };
 
+  const handleSendTest = async () => {
+    setTestBusy(true);
+    try {
+      const res = await api.post('/notifications/test', {
+        title: 'Test Notification',
+        body: 'If you can see this, push notifications are working correctly.',
+      });
+      const { sent, total } = res.data.data;
+      toast.success(`Sent to ${sent}/${total} subscribed device(s).`);
+    } catch (err) {
+      // error toast already shown by the axios interceptor
+    } finally {
+      setTestBusy(false);
+    }
+  };
+
   return (
     <Card>
       <div className="flex items-center gap-2 mb-3">
@@ -165,6 +183,17 @@ function NotificationsCard() {
         (e.g. "New &gt; Contacted (Vineet)"). Tapping a notification opens that lead directly.
       </p>
 
+      {status === 'ios-needs-install' && (
+        <div className="text-sm text-ink-muted space-y-1">
+          <p className="text-amber font-medium">On iPhone/iPad, Apple requires installing this as an app first:</p>
+          <ol className="list-decimal list-inside space-y-0.5">
+            <li>Tap the <strong>Share</strong> icon in Safari (square with an arrow)</li>
+            <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+            <li>Open YouWe CRM from the new icon on your Home Screen</li>
+            <li>Come back to this Settings page and tap Enable</li>
+          </ol>
+        </div>
+      )}
       {status === 'unsupported' && (
         <p className="text-sm text-ink-faint">Your browser doesn't support push notifications.</p>
       )}
@@ -180,6 +209,17 @@ function NotificationsCard() {
         <div className="flex items-center gap-3">
           <Badge variant="success">Enabled on this device</Badge>
           <Button variant="ghost" onClick={handleDisable} loading={busy}><BellOff size={14} /> Turn off</Button>
+        </div>
+      )}
+
+      {isAdmin && (
+        <div className="mt-4 pt-4 border-t border-surface-border">
+          <p className="text-xs text-ink-faint mb-2">
+            Admin tool: manually fire a push notification to every device that has notifications enabled - useful for testing without needing to add/change a real lead.
+          </p>
+          <Button variant="secondary" onClick={handleSendTest} loading={testBusy}>
+            <Send size={14} /> Send test notification to everyone
+          </Button>
         </div>
       )}
     </Card>
