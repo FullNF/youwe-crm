@@ -97,8 +97,8 @@ export default function PropertyDetailModal({ propertyId, onClose, onChanged }) 
     onChanged?.();
   };
 
-  const handleShareMedia = async (media) => {
-    const url = `${window.location.origin}/share/${media.id}`;
+  const handleShareProperty = async () => {
+    const url = `${window.location.origin}/share/property/${propertyId}`;
     const shareData = { title: property?.name || 'YouWe Group Property', url };
     if (navigator.share) {
       try {
@@ -120,8 +120,13 @@ export default function PropertyDetailModal({ propertyId, onClose, onChanged }) 
         ) : property ? (
           <div className="space-y-5">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <p className="text-sm text-ink-muted flex items-center gap-1.5"><MapPin size={13} /> {property.location}</p>
-              {property.propertyType && <Badge variant="accent">{property.propertyType}</Badge>}
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-ink-muted flex items-center gap-1.5"><MapPin size={13} /> {property.location}</p>
+                {property.propertyType && <Badge variant="accent">{property.propertyType}</Badge>}
+              </div>
+              <Button onClick={handleShareProperty} variant="secondary">
+                <Share2 size={14} /> Share Property
+              </Button>
             </div>
             {property.description && <p className="text-sm text-ink-muted">{property.description}</p>}
 
@@ -147,9 +152,6 @@ export default function PropertyDetailModal({ propertyId, onClose, onChanged }) 
                         <a href={m.downloadUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="p-2 rounded-full bg-white/90 text-black hover:scale-110 transition-transform" title="Download">
                           <Download size={14} />
                         </a>
-                        <button onClick={() => handleShareMedia(m)} className="p-2 rounded-full bg-white/90 text-accent hover:scale-110 transition-transform" title="Share with customer (no login needed)">
-                          <Share2 size={14} />
-                        </button>
                         <button onClick={() => handleRemoveMedia(m.id)} className="p-2 rounded-full bg-white/90 text-danger hover:scale-110 transition-transform" title="Remove">
                           <Trash2 size={14} />
                         </button>

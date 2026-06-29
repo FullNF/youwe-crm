@@ -6,23 +6,27 @@ const { streamDriveFile } = require('../utils/driveProxy');
 
 /**
  * Deliberately public (no requireAuth) - this is what powers shareable
- * "send this video to a customer" links. The media ID is a random UUID,
- * so it isn't guessable, and only the single matched media item's
- * non-sensitive info is returned - nothing else in the CRM is exposed.
+ * "send this property to a customer" links. The property ID is a random
+ * UUID, so it isn't guessable, and only this one property's name/location/
+ * media are returned - nothing else in the CRM is exposed.
  */
-const getPublicMedia = asyncHandler(async (req, res) => {
-  const media = await mediaRepo.getById(req.params.mediaId);
-  if (!media) return fail(res, 'This link is invalid or the media has been removed.', 404);
+const getPublicProperty = asyncHandler(async (req, res) => {
+  const property = await propertiesRepo.getById(req.params.propertyId);
+  if (!property) return fail(res, 'This link is invalid or the property has been removed.', 404);
 
-  const property = await propertiesRepo.getById(media.propertyId);
+  const media = await mediaRepo.getForProperty(req.params.propertyId);
 
   return ok(res, {
-    mediaType: media.mediaType,
-    streamUrl: media.streamUrl,
-    fullImageUrl: media.fullImageUrl,
-    caption: media.caption,
-    propertyName: property?.name || 'YouWe Group Property',
-    location: property?.location || '',
+    name: property.name,
+    location: property.location,
+    propertyType: property.propertyType,
+    media: media.map((m) => ({
+      id: m.id,
+      mediaType: m.mediaType,
+      caption: m.caption,
+      thumbnailUrl: m.thumbnailUrl,
+      fullImageUrl: m.fullImageUrl,
+    })),
   });
 });
 
@@ -38,4 +42,4 @@ const streamMedia = asyncHandler(async (req, res) => {
   await streamDriveFile(media.fileId, req, res);
 });
 
-module.exports = { getPublicMedia, streamMedia };
+module.exports = { getPublicProperty, streamMedia };
