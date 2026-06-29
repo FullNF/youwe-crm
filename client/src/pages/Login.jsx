@@ -49,12 +49,12 @@ export default function Login() {
       <motion.div
         animate={{ y: [0, -14, 0], rotate: [0, 8, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-        className="hidden sm:block absolute top-[18%] left-[28%] w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 pointer-events-none"
+        className="hidden sm:block absolute top-[18%] left-[28%] w-16 h-16 rounded-full bg-accent/10 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 pointer-events-none"
       />
       <motion.div
         animate={{ y: [0, 16, 0], rotate: [0, -10, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-        className="hidden sm:block absolute bottom-[20%] right-[30%] w-10 h-10 rounded-full bg-accent/20 backdrop-blur-md border border-white/15 pointer-events-none"
+        className="hidden sm:block absolute bottom-[20%] right-[30%] w-10 h-10 rounded-full bg-accent/20 backdrop-blur-md border border-black/10 dark:border-white/15 pointer-events-none"
       />
 
       <motion.div
@@ -69,7 +69,7 @@ export default function Login() {
           transition={{ duration: 0.5, delay: 0.05, type: 'spring', bounce: 0.35 }}
           className="flex flex-col items-center mb-8"
         >
-          <div className="w-[4.5rem] h-[4.5rem] rounded-2xl bg-white/95 flex items-center justify-center mb-4 shadow-glow-accent p-2.5 ring-1 ring-white/40">
+          <div className="w-[4.5rem] h-[4.5rem] rounded-2xl bg-white flex items-center justify-center mb-4 shadow-glow-accent p-2.5 ring-1 ring-black/10">
             <img src="/logo.png" alt="YouWe Group" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-xl font-semibold text-ink tracking-tight">YouWe CRM</h1>
@@ -80,7 +80,7 @@ export default function Login() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.15 }}
-          className="glass rounded-card shadow-popover p-7 ring-1 ring-white/[0.08]"
+          className="glass rounded-card shadow-popover p-7"
           style={{ backdropFilter: 'blur(28px) saturate(160%)', WebkitBackdropFilter: 'blur(28px) saturate(160%)' }}
         >
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -106,9 +106,9 @@ export default function Login() {
           </form>
 
           <div className="flex items-center gap-3 my-5">
-            <div className="h-px bg-white/10 flex-1" />
+            <div className="h-px bg-black/10 dark:bg-white/10 flex-1" />
             <span className="text-xs text-ink-faint">or</span>
-            <div className="h-px bg-white/10 flex-1" />
+            <div className="h-px bg-black/10 dark:bg-white/10 flex-1" />
           </div>
 
           <Button variant="secondary" className="w-full" onClick={onGoogle} disabled={submitting}>

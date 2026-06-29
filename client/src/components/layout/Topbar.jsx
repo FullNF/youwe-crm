@@ -1,13 +1,15 @@
-import { LogOut, ChevronDown, Menu } from 'lucide-react';
+import { LogOut, ChevronDown, Menu, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext';
 
 export default function Topbar({ title, children }) {
   const { profile, logout } = useAuth();
   const { toggle } = useSidebar();
+  const { isDark, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -28,6 +30,38 @@ export default function Topbar({ title, children }) {
 
         {/* Page actions (search, buttons, filters) sit inline on desktop, move below the title on mobile */}
         <div className="hidden md:flex items-center gap-3 flex-1 justify-end">{children}</div>
+
+        <button
+          onClick={toggleTheme}
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          className="relative shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-ink-muted hover:text-ink hover:bg-surface-hover transition-colors overflow-hidden"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {isDark ? (
+              <motion.span
+                key="moon"
+                initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                transition={{ duration: 0.25 }}
+                className="absolute"
+              >
+                <Moon size={17} />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="sun"
+                initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                transition={{ duration: 0.25 }}
+                className="absolute"
+              >
+                <Sun size={17} />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
 
         <div className="relative shrink-0">
           <button

@@ -6,39 +6,39 @@ export default {
     extend: {
       colors: {
         base: {
-          DEFAULT: '#0A0B0F', // app background
-          raised: '#0E1015',
+          DEFAULT: 'rgb(var(--c-base) / <alpha-value>)',
+          raised: 'rgb(var(--c-base-raised) / <alpha-value>)',
         },
         surface: {
-          DEFAULT: '#13151A', // card background
-          hover: '#171A21',
-          border: '#22242C',
+          DEFAULT: 'rgb(var(--c-surface) / <alpha-value>)',
+          hover: 'rgb(var(--c-surface-hover) / <alpha-value>)',
+          border: 'rgb(var(--c-surface-border) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: '#6E56CF', // primary brand violet (signature color)
-          hover: '#7C63DE',
-          soft: 'rgba(110, 86, 207, 0.14)',
+          DEFAULT: 'rgb(var(--c-accent) / <alpha-value>)',
+          hover: 'rgb(var(--c-accent-hover) / <alpha-value>)',
+          soft: 'rgb(var(--c-accent) / 0.14)',
         },
         amber: {
-          DEFAULT: '#F5A623',
-          soft: 'rgba(245, 166, 35, 0.14)',
+          DEFAULT: 'rgb(var(--c-amber) / <alpha-value>)',
+          soft: 'rgb(var(--c-amber) / 0.14)',
         },
         success: {
-          DEFAULT: '#10B981',
-          soft: 'rgba(16, 185, 129, 0.14)',
+          DEFAULT: 'rgb(var(--c-success) / <alpha-value>)',
+          soft: 'rgb(var(--c-success) / 0.14)',
         },
         danger: {
-          DEFAULT: '#EF4444',
-          soft: 'rgba(239, 68, 68, 0.14)',
+          DEFAULT: 'rgb(var(--c-danger) / <alpha-value>)',
+          soft: 'rgb(var(--c-danger) / 0.14)',
         },
         info: {
-          DEFAULT: '#3B82F6',
-          soft: 'rgba(59, 130, 246, 0.14)',
+          DEFAULT: 'rgb(var(--c-info) / <alpha-value>)',
+          soft: 'rgb(var(--c-info) / 0.14)',
         },
         ink: {
-          DEFAULT: '#F0F1F3', // primary text
-          muted: '#8A8D98', // secondary text
-          faint: '#5B5E6B', // tertiary / placeholder
+          DEFAULT: 'rgb(var(--c-ink) / <alpha-value>)',
+          muted: 'rgb(var(--c-ink-muted) / <alpha-value>)',
+          faint: 'rgb(var(--c-ink-faint) / <alpha-value>)',
         },
       },
       fontFamily: {

@@ -94,7 +94,7 @@ export default function Dashboard() {
               <Card hoverable className="p-4 group relative overflow-hidden">
                 <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${TONE_GRADIENT[tone]}`} />
                 <div className={`absolute -top-6 -right-6 w-20 h-20 rounded-full blur-2xl opacity-25 ${TONE_AURA[tone]} transition-opacity duration-300 group-hover:opacity-40`} />
-                <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center mb-3 backdrop-blur-sm ring-1 ring-white/10 ${TONE_BG[tone]} transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}>
+                <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center mb-3 backdrop-blur-sm ring-1 ring-black/5 dark:ring-white/10 ${TONE_BG[tone]} transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}>
                   <Icon size={17} />
                 </div>
                 {loading ? (
@@ -142,7 +142,7 @@ export default function Dashboard() {
                 <div
                   key={lead.recordId}
                   onClick={() => navigate(`/leads/${lead.recordId}`)}
-                  className="flex items-center justify-between cursor-pointer hover:bg-white/[0.04] rounded-xl px-2 py-1.5 -mx-2 transition-all duration-150 hover:translate-x-0.5 active:scale-[0.99]"
+                  className="flex items-center justify-between cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.04] rounded-xl px-2 py-1.5 -mx-2 transition-all duration-150 hover:translate-x-0.5 active:scale-[0.99]"
                 >
                   <div className="min-w-0">
                     <p className="text-sm text-ink truncate">{lead.customerName}</p>
@@ -166,7 +166,7 @@ export default function Dashboard() {
                 <div
                   key={lead.recordId}
                   onClick={() => navigate(`/leads/${lead.recordId}`)}
-                  className="flex items-center justify-between cursor-pointer hover:bg-white/[0.04] rounded-xl px-2 py-1.5 -mx-2 transition-all duration-150 hover:translate-x-0.5 active:scale-[0.99]"
+                  className="flex items-center justify-between cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.04] rounded-xl px-2 py-1.5 -mx-2 transition-all duration-150 hover:translate-x-0.5 active:scale-[0.99]"
                 >
                   <div className="min-w-0">
                     <p className="text-sm text-ink truncate">{lead.customerName}</p>
