@@ -20,8 +20,25 @@ function MediaLightbox({ media, onClose }) {
             <X size={18} />
           </button>
         </div>
-        <div className="rounded-2xl overflow-hidden bg-black aspect-video">
-          <iframe src={media.previewUrl} className="w-full h-full" allow="autoplay" title={media.caption || 'Preview'} />
+        <div className="rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+          {media.mediaType === 'Video' ? (
+            <video
+              src={media.streamUrl}
+              controls
+              controlsList="nodownload noremoteplayback"
+              autoPlay
+              className="w-full h-full"
+              onContextMenu={(e) => e.preventDefault()}
+            />
+          ) : (
+            <img
+              src={media.fullImageUrl}
+              alt={media.caption || 'Preview'}
+              className="max-w-full max-h-full object-contain"
+              draggable="false"
+              onContextMenu={(e) => e.preventDefault()}
+            />
+          )}
         </div>
         <div className="flex justify-end mt-3">
           <a href={media.downloadUrl} target="_blank" rel="noopener noreferrer">

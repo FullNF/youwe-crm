@@ -17,7 +17,8 @@ const getPublicMedia = asyncHandler(async (req, res) => {
 
   return ok(res, {
     mediaType: media.mediaType,
-    previewUrl: media.previewUrl,
+    streamUrl: media.streamUrl,
+    fullImageUrl: media.fullImageUrl,
     caption: media.caption,
     propertyName: property?.name || 'YouWe Group Property',
     location: property?.location || '',

@@ -59,13 +59,25 @@ export default function PublicMediaView() {
 
         {!loading && media && (
           <div className="glass rounded-card overflow-hidden shadow-popover">
-            <div className="aspect-video bg-black relative">
-              <iframe
-                src={media.previewUrl}
-                className="w-full h-full"
-                allow="autoplay; fullscreen"
-                title={media.caption || media.propertyName}
-              />
+            <div className="aspect-video bg-black relative flex items-center justify-center">
+              {media.mediaType === 'Video' ? (
+                <video
+                  src={media.streamUrl}
+                  controls
+                  controlsList="nodownload noremoteplayback"
+                  autoPlay
+                  className="w-full h-full"
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+              ) : (
+                <img
+                  src={media.fullImageUrl}
+                  alt={media.caption || media.propertyName}
+                  className="max-w-full max-h-full object-contain"
+                  draggable="false"
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+              )}
               {/* Subtle brand watermark - visible even on a publicly shared link */}
               <div className="absolute bottom-3 right-3 pointer-events-none opacity-75">
                 <img src="/logo.png" alt="" className="h-7 object-contain" />
