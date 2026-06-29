@@ -44,6 +44,10 @@ async function streamDriveFile(fileId, req, res) {
   res.setHeader('Content-Type', contentType || 'application/octet-stream');
   res.setHeader('Accept-Ranges', 'bytes');
   res.setHeader('Cache-Control', 'public, max-age=3600');
+  // Helmet sets Cross-Origin-Resource-Policy: same-origin by default on every
+  // response, which blocks our Vercel-hosted frontend from loading this
+  // stream from our separate Render-hosted backend. Override it just here.
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
 
   const contentLength = driveRes.headers.get('content-length');
   if (contentLength) res.setHeader('Content-Length', contentLength);

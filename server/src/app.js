@@ -10,7 +10,11 @@ const { notFound, errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
 
-app.use(helmet());
+// Our API is always called from a different origin (Vercel frontend ->
+// Render backend), so Helmet's default same-origin resource policy would
+// block any endpoint that serves media/files directly (e.g. the video/image
+// streaming proxy below). Cross-origin embedding is exactly what we need.
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
 // CLIENT_ORIGIN can be a comma-separated list (e.g. your custom domain +
 // localhost for local dev). On top of that, ANY *.vercel.app subdomain is
