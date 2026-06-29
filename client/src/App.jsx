@@ -13,6 +13,7 @@ import NeedAttention from './pages/NeedAttention';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import PropertyGalleryList from './pages/PropertyGallery/PropertyGalleryList';
+import PublicMediaView from './pages/PublicMediaView';
 
 export default function App() {
   // Keep the service worker fresh on every visit. Without this, a browser
@@ -53,6 +54,7 @@ export default function App() {
           />
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/share/:mediaId" element={<PublicMediaView />} />
             <Route
               element={
                 <ProtectedRoute>

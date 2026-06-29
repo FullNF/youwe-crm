@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { MapPin, Play, Download, X, Plus, Trash2, Image as ImageIcon, Video } from 'lucide-react';
+import { MapPin, Play, Download, Share2, X, Plus, Trash2, Image as ImageIcon, Video } from 'lucide-react';
 import Modal from '../../components/ui/Modal';
 import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
@@ -77,6 +77,21 @@ export default function PropertyDetailModal({ propertyId, onClose, onChanged }) 
     onChanged?.();
   };
 
+  const handleShareMedia = async (media) => {
+    const url = `${window.location.origin}/share/${media.id}`;
+    const shareData = { title: property?.name || 'YouWe Group Property', url };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // user cancelled - not an error
+      }
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success('Shareable link copied! No login needed to view it.');
+    }
+  };
+
   return (
     <>
       <Modal open={Boolean(propertyId)} onClose={onClose} title={property?.name || 'Property'} width="max-w-3xl">
@@ -112,6 +127,9 @@ export default function PropertyDetailModal({ propertyId, onClose, onChanged }) 
                         <a href={m.downloadUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="p-2 rounded-full bg-white/90 text-black hover:scale-110 transition-transform" title="Download">
                           <Download size={14} />
                         </a>
+                        <button onClick={() => handleShareMedia(m)} className="p-2 rounded-full bg-white/90 text-accent hover:scale-110 transition-transform" title="Share with customer (no login needed)">
+                          <Share2 size={14} />
+                        </button>
                         <button onClick={() => handleRemoveMedia(m.id)} className="p-2 rounded-full bg-white/90 text-danger hover:scale-110 transition-transform" title="Remove">
                           <Trash2 size={14} />
                         </button>

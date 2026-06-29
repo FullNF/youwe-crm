@@ -7,6 +7,7 @@ const settingsRoutes = require('./settings.routes');
 const usersRoutes = require('./users.routes');
 const notificationsRoutes = require('./notifications.routes');
 const propertiesRoutes = require('./properties.routes');
+const publicRoutes = require('./public.routes');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/settings', settingsRoutes);
 router.use('/users', usersRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/properties', propertiesRoutes);
+router.use('/public', publicRoutes);
 
 module.exports = router;

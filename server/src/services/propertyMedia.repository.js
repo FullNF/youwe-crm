@@ -12,6 +12,12 @@ async function getAll() {
   return rows.filter((r) => r.id);
 }
 
+async function getById(id) {
+  const all = await getAll();
+  const item = all.find((m) => m.id === id);
+  return item ? { ...item, ...buildDriveUrls(item.driveLink) } : null;
+}
+
 async function getForProperty(propertyId) {
   const all = await getAll();
   return all
@@ -78,4 +84,4 @@ async function removeAllForProperty(propertyId) {
   }
 }
 
-module.exports = { getForProperty, getFirstThumbnailsByProperty, getCountsByProperty, add, remove, removeAllForProperty };
+module.exports = { getById, getForProperty, getFirstThumbnailsByProperty, getCountsByProperty, add, remove, removeAllForProperty };
