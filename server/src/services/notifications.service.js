@@ -81,4 +81,19 @@ function deletedLeadPayload(lead, actorName) {
   };
 }
 
-module.exports = { notifyAll, newLeadPayload, stageChangePayload, deletedLeadPayload };
+/**
+ * "Mr Haq called Nishat at 6:00 PM but hasn't remarked or updated the stage
+ * yet." - fires from the periodic no-followup check, not from any direct
+ * user action.
+ */
+function noFollowupReminderPayload(lead) {
+  const time = new Date(lead.lastContactedAt).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const caller = lead.lastContactedBy || 'Someone';
+  return {
+    title: 'Follow-up Needed',
+    body: `${caller} contacted ${lead.customerName} at ${time} but hasn't added a remark or updated the stage yet.`,
+    url: `/leads/${lead.recordId}`,
+  };
+}
+
+module.exports = { notifyAll, newLeadPayload, stageChangePayload, deletedLeadPayload, noFollowupReminderPayload };

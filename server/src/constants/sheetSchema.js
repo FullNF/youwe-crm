@@ -42,6 +42,9 @@ const LEADS_COLUMNS = [
   { key: 'lastUpdated', label: 'Last Updated' },
   { key: 'createdAt', label: 'Created At' },
   { key: 'createdBy', label: 'Created By' },
+  { key: 'lastContactedAt', label: 'Last Contacted At' }, // set when Call/WhatsApp is tapped, or stage set to Contacted
+  { key: 'lastContactedBy', label: 'Last Contacted By' }, // name of whoever tapped Call/WhatsApp
+  { key: 'contactReminderSentAt', label: 'Contact Reminder Sent At' }, // prevents duplicate 15-min nudges per contact attempt
   { key: 'recordId', label: 'Record ID' },
 ];
 
@@ -95,7 +98,7 @@ const ENUMS = {
   PROPERTY_CONDITION: ['Fully Furnished', 'Furnished', 'Semi-Furnished', 'Unfurnished', 'Raw'],
   CONFIGURATION: ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', 'Villa', 'Office', 'Shop'],
   VISIT_STATUS: ['Pending', 'Scheduled', 'Done', 'Cancelled'],
-  LEAD_STAGE: ['New', 'Contacted', 'Follow-up', 'Ready to Visit', 'Visit Done', 'Negotiation', 'Won', 'Lost', 'Hold'],
+  LEAD_STAGE: ['New', 'Calling', 'Contacted', 'Follow-up', 'Ready to Visit', 'Visit Done', 'Negotiation', 'Won', 'Lost', 'Hold'],
   NEED_LOAN: ['Yes', 'No'],
   LEAD_SOURCE: ['Facebook', 'Instagram', 'MagicBricks', '99acres', 'Reference', 'Walk-In', 'Website', 'Other'],
   PRIORITY: ['Hot', 'Warm', 'Cold'],

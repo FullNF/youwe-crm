@@ -109,7 +109,7 @@ export default function LeadDetails() {
                   icon={Phone}
                   label="Contact"
                   value={lead.contactDetails}
-                  action={<ContactActions size="md" phone={lead.contactDetails} />}
+                  action={<ContactActions size="md" phone={lead.contactDetails} recordId={lead.recordId} onLogged={load} />}
                 />
                 <InfoRow icon={MapPin} label="Area Need" value={lead.areaNeed} />
                 <InfoRow icon={User} label="Lead Managed By" value={lead.leadManagedBy} />

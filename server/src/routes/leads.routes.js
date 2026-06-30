@@ -12,5 +12,6 @@ router.post('/', ctrl.create);
 router.put('/:id', ctrl.update);
 router.delete('/:id', ctrl.remove);
 router.post('/:id/remarks', ctrl.addRemark);
+router.post('/:id/log-contact', ctrl.logContact);
 
 module.exports = router;

@@ -37,6 +37,11 @@ const env = {
   VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY || '',
   VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY || '',
   VAPID_SUBJECT: process.env.VAPID_SUBJECT || 'mailto:admin@youwegroup.com',
+
+  // Shared secret for the external cron trigger (e.g. cron-job.org) that
+  // calls /api/cron/check-followups periodically. Without this set, that
+  // endpoint refuses all requests.
+  CRON_SECRET: process.env.CRON_SECRET || '',
 };
 
 module.exports = env;

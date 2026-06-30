@@ -138,4 +138,38 @@ const addRemark = asyncHandler(async (req, res) => {
   return created(res, event);
 });
 
-module.exports = { list, getOne, create, update, remove, addRemark, checkDuplicates };
+/**
+ * Called when the Call or WhatsApp button is tapped on a lead. This is the
+ * trigger for the whole "did someone actually follow up" loop:
+ *   - Stamps lastContactedAt (this clears the "unread" red dot in the list)
+ *   - Moves stage to "Calling" if it's still sitting at "New" (doesn't
+ *     clobber later-stage leads someone is re-contacting)
+ *   - Resets contactReminderSentAt so the 15-minute nudge job will fire
+ *     again for THIS contact attempt if no remark/stage update follows
+ */
+const logContact = asyncHandler(async (req, res) => {
+  const { method } = req.body; // 'call' | 'whatsapp' - logged in the timeline note only
+  const existing = await leadsRepo.getById(req.params.id);
+  if (!existing) return fail(res, 'Lead not found', 404);
+
+  const patch = { lastContactedAt: new Date().toISOString(), lastContactedBy: req.user.name, contactReminderSentAt: '' };
+  if (existing.leadStage === 'New' || !existing.leadStage) {
+    patch.leadStage = 'Calling';
+  }
+
+  const updated = await leadsRepo.update(req.params.id, patch);
+
+  if (patch.leadStage && patch.leadStage !== existing.leadStage) {
+    await timelineRepo.addEvent(req.params.id, 'Calling', `Stage changed: ${existing.leadStage || '—'} → Calling`, req.user.email);
+  }
+  await timelineRepo.addEvent(
+    req.params.id,
+    method === 'whatsapp' ? 'WhatsApp Opened' : 'Call Initiated',
+    `${req.user.name} ${method === 'whatsapp' ? 'opened WhatsApp for' : 'called'} ${existing.customerName}`,
+    req.user.email
+  );
+
+  return ok(res, updated);
+});
+
+module.exports = { list, getOne, create, update, remove, addRemark, checkDuplicates, logContact };

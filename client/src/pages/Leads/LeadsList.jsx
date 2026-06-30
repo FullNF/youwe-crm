@@ -17,6 +17,18 @@ import { OPTIONS, STAGE_COLORS, PRIORITY_COLORS } from '../../constants/options'
 import LeadFormModal from './LeadFormModal';
 import toast from 'react-hot-toast';
 
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const CLOSED_STAGES = ['Won', 'Lost'];
+
+/** A lead is "unread" (red dot) if it's never been contacted and it's been sitting for 24+ hours, and isn't already closed. */
+function isUnread(lead) {
+  if (CLOSED_STAGES.includes(lead.leadStage)) return false;
+  if (lead.lastContactedAt) return false;
+  const created = new Date(lead.createdAt || lead.leadCreatedDate || 0).getTime();
+  if (!created) return false;
+  return Date.now() - created >= ONE_DAY_MS;
+}
+
 const FILTER_DEFS = [
   { key: 'buyOrRent', label: 'Buy/Rent', options: OPTIONS.BUY_OR_RENT },
   { key: 'leadStage', label: 'Stage', options: OPTIONS.LEAD_STAGE },
@@ -67,11 +79,16 @@ export default function LeadsList() {
     {
       key: 'customerName', label: 'Customer', sortable: true,
       render: (row) => (
-        <div>
-          <p className="font-medium text-ink">{row.customerName}</p>
-          <div className="flex items-center gap-1">
-            <p className="text-xs text-ink-faint flex items-center gap-1"><Phone size={10} />{row.contactDetails}</p>
-            <ContactActions phone={row.contactDetails} />
+        <div className="flex items-start gap-2">
+          {isUnread(row) && (
+            <span className="mt-1.5 w-2 h-2 rounded-full bg-danger shadow-glow-danger shrink-0 animate-dangerPulse" title="No contact made yet" />
+          )}
+          <div>
+            <p className="font-medium text-ink">{row.customerName}</p>
+            <div className="flex items-center gap-1">
+              <p className="text-xs text-ink-faint flex items-center gap-1"><Phone size={10} />{row.contactDetails}</p>
+              <ContactActions phone={row.contactDetails} recordId={row.recordId} onLogged={refetch} />
+            </div>
           </div>
         </div>
       ),

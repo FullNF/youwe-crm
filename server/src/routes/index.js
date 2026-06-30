@@ -8,6 +8,7 @@ const usersRoutes = require('./users.routes');
 const notificationsRoutes = require('./notifications.routes');
 const propertiesRoutes = require('./properties.routes');
 const publicRoutes = require('./public.routes');
+const cronRoutes = require('./cron.routes');
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.use('/users', usersRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/properties', propertiesRoutes);
 router.use('/public', publicRoutes);
+router.use('/cron', cronRoutes);
 
 module.exports = router;
