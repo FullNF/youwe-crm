@@ -104,8 +104,26 @@ export default function LeadsList() {
       key: 'priority', label: 'Priority', sortable: true,
       render: (row) => <Badge variant={PRIORITY_COLORS[row.priority] || 'neutral'} pulse={row.priority === 'Hot'}>{row.priority || '—'}</Badge>,
     },
-    { key: 'leadManagedBy', label: 'Managed By', className: 'hidden md:table-cell' },
-    { key: 'nextFollowUpDate', label: 'Next Follow-up', sortable: true, className: 'hidden lg:table-cell' },
+    {
+      key: 'lastUpdatedBy', label: 'Updated By', className: 'hidden md:table-cell',
+      render: (row) => {
+        if (!row.lastUpdatedBy) {
+          // Fallback for leads created before this field existed
+          return <span className="text-ink-muted text-sm">{row.leadManagedBy || '—'}</span>;
+        }
+        const [name, ...timeParts] = row.lastUpdatedBy.split(' · ');
+        const time = timeParts.join(' · ');
+        return (
+          <div>
+            <p className="text-sm text-ink">{name}</p>
+            {time && <p className="text-[10px] text-ink-faint leading-tight">{time}</p>}
+          </div>
+        );
+      },
+    },
+    { key: 'leadSource', label: 'Lead Source', className: 'hidden lg:table-cell',
+      render: (row) => <span className="text-ink-muted text-sm">{row.leadSource || '—'}</span>,
+    },
     {
       key: 'actions', label: '',
       render: (row) => (

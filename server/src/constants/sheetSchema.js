@@ -43,6 +43,7 @@ const LEADS_COLUMNS = [
   { key: 'createdAt', label: 'Created At' },
   { key: 'createdBy', label: 'Created By' },
   { key: 'recordId', label: 'Record ID' },
+  { key: 'lastUpdatedBy', label: 'Last Updated By' }, // name + timestamp of last meaningful action (create/edit/call)
   { key: 'lastContactedAt', label: 'Last Contacted At' }, // set when Call/WhatsApp is tapped, or stage set to Contacted
   { key: 'lastContactedBy', label: 'Last Contacted By' }, // name of whoever tapped Call/WhatsApp
   { key: 'contactReminderSentAt', label: 'Contact Reminder Sent At' }, // prevents duplicate 15-min nudges per contact attempt

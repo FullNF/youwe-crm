@@ -78,9 +78,15 @@ const checkDuplicates = asyncHandler(async (req, res) => {
   return ok(res, dupes);
 });
 
+/** Compact "Name · 30 Jun 3:45 PM" label stored in lastUpdatedBy. */
+function updatedByLabel(name) {
+  const time = new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
+  return `${name} · ${time}`;
+}
+
 const create = asyncHandler(async (req, res) => {
   const data = leadSchema.parse(req.body);
-  const lead = await leadsRepo.create(data, req.user.email);
+  const lead = await leadsRepo.create({ ...data, lastUpdatedBy: updatedByLabel(req.user.name) }, req.user.email);
   await timelineRepo.addEvent(lead.recordId, 'Created', `Lead created by ${req.user.name}`, req.user.email);
   if (data.leadStage && data.leadStage !== 'New') {
     await timelineRepo.addEvent(lead.recordId, data.leadStage, `Stage set to ${data.leadStage}`, req.user.email);
@@ -94,9 +100,8 @@ const update = asyncHandler(async (req, res) => {
   const existing = await leadsRepo.getById(req.params.id);
   if (!existing) return fail(res, 'Lead not found', 404);
 
-  const updated = await leadsRepo.update(req.params.id, patch);
+  const updated = await leadsRepo.update(req.params.id, { ...patch, lastUpdatedBy: updatedByLabel(req.user.name) });
 
-  // Append timeline events for meaningful changes - never overwrite, always append.
   if (patch.leadStage && patch.leadStage !== existing.leadStage) {
     await timelineRepo.addEvent(req.params.id, patch.leadStage, `Stage changed: ${existing.leadStage || '—'} → ${patch.leadStage}`, req.user.email);
     notificationsService
@@ -133,26 +138,22 @@ const addRemark = asyncHandler(async (req, res) => {
   const existing = await leadsRepo.getById(req.params.id);
   if (!existing) return fail(res, 'Lead not found', 404);
 
-  await leadsRepo.update(req.params.id, { leadRemark: note, lastContactDate: new Date().toISOString() });
+  await leadsRepo.update(req.params.id, { leadRemark: note, lastContactDate: new Date().toISOString(), lastUpdatedBy: updatedByLabel(req.user.name) });
   const event = await timelineRepo.addEvent(req.params.id, 'Remark', note, req.user.email);
   return created(res, event);
 });
 
-/**
- * Called when the Call or WhatsApp button is tapped on a lead. This is the
- * trigger for the whole "did someone actually follow up" loop:
- *   - Stamps lastContactedAt (this clears the "unread" red dot in the list)
- *   - Moves stage to "Calling" if it's still sitting at "New" (doesn't
- *     clobber later-stage leads someone is re-contacting)
- *   - Resets contactReminderSentAt so the 15-minute nudge job will fire
- *     again for THIS contact attempt if no remark/stage update follows
- */
 const logContact = asyncHandler(async (req, res) => {
-  const { method } = req.body; // 'call' | 'whatsapp' - logged in the timeline note only
+  const { method } = req.body;
   const existing = await leadsRepo.getById(req.params.id);
   if (!existing) return fail(res, 'Lead not found', 404);
 
-  const patch = { lastContactedAt: new Date().toISOString(), lastContactedBy: req.user.name, contactReminderSentAt: '' };
+  const patch = {
+    lastContactedAt: new Date().toISOString(),
+    lastContactedBy: req.user.name,
+    lastUpdatedBy: updatedByLabel(req.user.name),
+    contactReminderSentAt: '',
+  };
   if (existing.leadStage === 'New' || !existing.leadStage) {
     patch.leadStage = 'Calling';
   }
