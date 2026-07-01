@@ -90,18 +90,11 @@ const list = asyncHandler(async (req, res) => {
     return { ...lead, lastActor: `${actorName} · ${actorTime}`, lastActorAction: evt.actionType, _lastEventAt: evt.createdAt };
   });
 
-  // Re-sort by last timeline event time so most recently touched leads appear
-  // first regardless of what lastUpdated says. Leads with no timeline activity
-  // (no _lastEventAt) fall to the bottom naturally.
+  // Default sort: newest lead first (queue order). Timeline data is attached
+  // for the "Updated By" column display only - not used for sorting.
   items.sort((a, b) => {
-    const at = a._lastEventAt ? new Date(a._lastEventAt).getTime() : 0;
-    const bt = b._lastEventAt ? new Date(b._lastEventAt).getTime() : 0;
-    if (at === bt) {
-      // Tiebreaker: lead created more recently goes first
-      const ac = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const bc = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-      return bc - ac;
-    }
+    const at = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const bt = b.createdAt ? new Date(b.createdAt).getTime() : 0;
     return bt - at;
   });
 
