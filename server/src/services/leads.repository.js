@@ -170,9 +170,21 @@ async function query({
   if (filters.visited === 'yes') all = all.filter((l) => l.visitStatus === 'Done');
   if (filters.visited === 'no') all = all.filter((l) => l.visitStatus !== 'Done');
 
+  const DATE_FIELDS = new Set(['lastUpdated', 'createdAt', 'leadCreatedDate', 'nextFollowUpDate', 'visitedDate', 'lastContactDate', 'lastContactedAt']);
+
   all.sort((a, b) => {
     const av = a[sortBy] || '';
     const bv = b[sortBy] || '';
+
+    if (DATE_FIELDS.has(sortBy)) {
+      // Empty dates always go to the bottom regardless of sort direction
+      if (!av && !bv) return 0;
+      if (!av) return 1;
+      if (!bv) return -1;
+      const diff = new Date(av).getTime() - new Date(bv).getTime();
+      return sortDir === 'asc' ? diff : -diff;
+    }
+
     const cmp = String(av).localeCompare(String(bv), undefined, { numeric: true, sensitivity: 'base' });
     return sortDir === 'asc' ? cmp : -cmp;
   });
