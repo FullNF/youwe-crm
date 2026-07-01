@@ -50,6 +50,8 @@ const listQuerySchema = z.object({
   visited: z.enum(['yes', 'no']).optional(),
 });
 
+const usersRepo = require('../services/users.repository');
+
 const list = asyncHandler(async (req, res) => {
   const q = listQuerySchema.parse(req.query);
   const { search, sortBy, sortDir, page, pageSize, ...filters } = q;
@@ -61,7 +63,33 @@ const list = asyncHandler(async (req, res) => {
     pageSize: pageSize || 25,
     filters,
   });
-  return ok(res, result.items, { total: result.total, page: result.page, pageSize: result.pageSize, totalPages: result.totalPages });
+
+  // Attach last timeline actor to every lead in one extra Sheet read (not N reads).
+  const [lastEventMap, users] = await Promise.all([
+    timelineRepo.getLastEventPerLead(),
+    usersRepo.getAll(),
+  ]);
+
+  // email → display name lookup
+  const nameByEmail = {};
+  for (const u of users) {
+    if (u.email) nameByEmail[u.email] = u.name || u.email.split('@')[0];
+  }
+
+  const items = result.items.map((lead) => {
+    const evt = lastEventMap.get(lead.recordId);
+    if (!evt) return lead;
+    const actorEmail = evt.createdBy || '';
+    const actorName = nameByEmail[actorEmail] || actorEmail.split('@')[0] || '—';
+    const actorTime = evt.createdAt
+      ? new Date(evt.createdAt).toLocaleString('en-IN', {
+          day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true,
+        })
+      : '';
+    return { ...lead, lastActor: `${actorName} · ${actorTime}`, lastActorAction: evt.actionType };
+  });
+
+  return ok(res, items, { total: result.total, page: result.page, pageSize: result.pageSize, totalPages: result.totalPages });
 });
 
 const getOne = asyncHandler(async (req, res) => {

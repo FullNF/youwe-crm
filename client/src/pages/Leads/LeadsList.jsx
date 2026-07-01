@@ -105,34 +105,19 @@ export default function LeadsList() {
       render: (row) => <Badge variant={PRIORITY_COLORS[row.priority] || 'neutral'} pulse={row.priority === 'Hot'}>{row.priority || '—'}</Badge>,
     },
     {
-      key: 'lastUpdatedBy', label: 'Updated By', className: 'hidden md:table-cell',
+      key: 'lastActor', label: 'Updated By', className: 'hidden md:table-cell',
       render: (row) => {
-        // New format: "Name · 30 Jun, 3:45 PM"
-        if (row.lastUpdatedBy && row.lastUpdatedBy.includes(' · ')) {
-          const dotIndex = row.lastUpdatedBy.indexOf(' · ');
-          const name = row.lastUpdatedBy.slice(0, dotIndex).trim();
-          const time = row.lastUpdatedBy.slice(dotIndex + 3).trim();
-          return (
-            <div>
-              {time && <p className="text-[10px] text-ink-faint leading-tight">{time}</p>}
-              {name && <p className="text-sm text-ink font-medium">{name}</p>}
-            </div>
-          );
-        }
-        // Old leads fallback — show creator + creation date
-        if (row.createdBy) {
-          const creatorName = row.createdBy.includes('@') ? row.createdBy.split('@')[0] : row.createdBy;
-          const createdTime = row.createdAt
-            ? new Date(row.createdAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })
-            : '';
-          return (
-            <div>
-              {createdTime && <p className="text-[10px] text-ink-faint leading-tight">{createdTime}</p>}
-              <p className="text-sm text-ink font-medium">{creatorName}</p>
-            </div>
-          );
-        }
-        return <span className="text-ink-muted text-sm">—</span>;
+        const raw = row.lastActor || '';
+        if (!raw) return <span className="text-ink-muted text-sm">—</span>;
+        const dotIndex = raw.indexOf(' · ');
+        const name = dotIndex >= 0 ? raw.slice(0, dotIndex).trim() : raw;
+        const time = dotIndex >= 0 ? raw.slice(dotIndex + 3).trim() : '';
+        return (
+          <div>
+            {time && <p className="text-[10px] text-ink-faint leading-tight">{time}</p>}
+            <p className="text-sm text-ink font-medium">{name}</p>
+          </div>
+        );
       },
     },
     { key: 'leadSource', label: 'Lead Source', className: 'hidden lg:table-cell',

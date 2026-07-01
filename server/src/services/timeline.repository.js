@@ -19,6 +19,24 @@ async function getForLead(leadRecordId) {
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 }
 
+/**
+ * Reads the entire Timeline sheet ONCE and returns a Map of
+ * leadRecordId → the single most-recent timeline event for that lead.
+ * Used by the leads list to show "last actor" without N+1 sheet reads.
+ */
+async function getLastEventPerLead() {
+  const all = await sheetsService.getAllObjects(TAB, TIMELINE_COLUMNS);
+  const map = new Map();
+  for (const event of all) {
+    if (!event.leadRecordId || !event.createdAt) continue;
+    const existing = map.get(event.leadRecordId);
+    if (!existing || new Date(event.createdAt) > new Date(existing.createdAt)) {
+      map.set(event.leadRecordId, event);
+    }
+  }
+  return map;
+}
+
 async function addEvent(leadRecordId, actionType, note, createdByEmail) {
   const obj = {
     timelineId: uuidv4(),
@@ -32,4 +50,4 @@ async function addEvent(leadRecordId, actionType, note, createdByEmail) {
   return obj;
 }
 
-module.exports = { getForLead, addEvent };
+module.exports = { getForLead, getLastEventPerLead, addEvent };
