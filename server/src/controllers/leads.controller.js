@@ -78,15 +78,18 @@ const checkDuplicates = asyncHandler(async (req, res) => {
   return ok(res, dupes);
 });
 
-/** Compact "Name · 30 Jun 3:45 PM" label stored in lastUpdatedBy. */
-function updatedByLabel(name) {
-  const time = new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
+/** "Name · 30 Jun, 3:45 PM" - name is taken from profile name first, then email prefix. */
+function updatedByLabel(user) {
+  const name = user.name || (user.email ? user.email.split('@')[0] : 'Unknown');
+  const time = new Date().toLocaleString('en-IN', {
+    day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true,
+  });
   return `${name} · ${time}`;
 }
 
 const create = asyncHandler(async (req, res) => {
   const data = leadSchema.parse(req.body);
-  const lead = await leadsRepo.create({ ...data, lastUpdatedBy: updatedByLabel(req.user.name) }, req.user.email);
+  const lead = await leadsRepo.create({ ...data, lastUpdatedBy: updatedByLabel(req.user) }, req.user.email);
   await timelineRepo.addEvent(lead.recordId, 'Created', `Lead created by ${req.user.name}`, req.user.email);
   if (data.leadStage && data.leadStage !== 'New') {
     await timelineRepo.addEvent(lead.recordId, data.leadStage, `Stage set to ${data.leadStage}`, req.user.email);
@@ -100,7 +103,7 @@ const update = asyncHandler(async (req, res) => {
   const existing = await leadsRepo.getById(req.params.id);
   if (!existing) return fail(res, 'Lead not found', 404);
 
-  const updated = await leadsRepo.update(req.params.id, { ...patch, lastUpdatedBy: updatedByLabel(req.user.name) });
+  const updated = await leadsRepo.update(req.params.id, { ...patch, lastUpdatedBy: updatedByLabel(req.user) });
 
   if (patch.leadStage && patch.leadStage !== existing.leadStage) {
     await timelineRepo.addEvent(req.params.id, patch.leadStage, `Stage changed: ${existing.leadStage || '—'} → ${patch.leadStage}`, req.user.email);
@@ -138,7 +141,7 @@ const addRemark = asyncHandler(async (req, res) => {
   const existing = await leadsRepo.getById(req.params.id);
   if (!existing) return fail(res, 'Lead not found', 404);
 
-  await leadsRepo.update(req.params.id, { leadRemark: note, lastContactDate: new Date().toISOString(), lastUpdatedBy: updatedByLabel(req.user.name) });
+  await leadsRepo.update(req.params.id, { leadRemark: note, lastContactDate: new Date().toISOString(), lastUpdatedBy: updatedByLabel(req.user) });
   const event = await timelineRepo.addEvent(req.params.id, 'Remark', note, req.user.email);
   return created(res, event);
 });
@@ -151,7 +154,7 @@ const logContact = asyncHandler(async (req, res) => {
   const patch = {
     lastContactedAt: new Date().toISOString(),
     lastContactedBy: req.user.name,
-    lastUpdatedBy: updatedByLabel(req.user.name),
+    lastUpdatedBy: updatedByLabel(req.user),
     contactReminderSentAt: '',
   };
   if (existing.leadStage === 'New' || !existing.leadStage) {

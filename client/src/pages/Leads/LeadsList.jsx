@@ -107,36 +107,32 @@ export default function LeadsList() {
     {
       key: 'lastUpdatedBy', label: 'Updated By', className: 'hidden md:table-cell',
       render: (row) => {
-        const raw = row.lastUpdatedBy || row.leadManagedBy || '';
-        if (!raw) return <span className="text-ink-muted text-sm">—</span>;
-
-        // Format: "Name · 30 Jun 3:45 PM"  (our new format)
-        // Legacy: just a plain name with no ·
-        const hasDot = raw.includes(' · ');
-        const name = hasDot ? raw.split(' · ')[0] : raw;
-        const timePart = hasDot ? raw.split(' · ')[1] : '';
-
-        // If the value is a raw ISO timestamp (old data or migration edge-case),
-        // convert it to a human-readable form instead of showing "2026-07-01T..."
-        let displayTime = timePart;
-        if (!hasDot && /^\d{4}-\d{2}-\d{2}T/.test(raw)) {
-          displayTime = new Date(raw).toLocaleString('en-IN', {
-            day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true,
-          });
+        // New format: "Name · 30 Jun, 3:45 PM"
+        if (row.lastUpdatedBy && row.lastUpdatedBy.includes(' · ')) {
+          const dotIndex = row.lastUpdatedBy.indexOf(' · ');
+          const name = row.lastUpdatedBy.slice(0, dotIndex).trim();
+          const time = row.lastUpdatedBy.slice(dotIndex + 3).trim();
           return (
             <div>
-              <p className="text-[10px] text-ink-faint leading-tight">{displayTime}</p>
-              <p className="text-sm text-ink">—</p>
+              {time && <p className="text-[10px] text-ink-faint leading-tight">{time}</p>}
+              {name && <p className="text-sm text-ink font-medium">{name}</p>}
             </div>
           );
         }
-
-        return (
-          <div>
-            {displayTime && <p className="text-[10px] text-ink-faint leading-tight">{displayTime}</p>}
-            <p className="text-sm text-ink">{name}</p>
-          </div>
-        );
+        // Old leads fallback — show creator + creation date
+        if (row.createdBy) {
+          const creatorName = row.createdBy.includes('@') ? row.createdBy.split('@')[0] : row.createdBy;
+          const createdTime = row.createdAt
+            ? new Date(row.createdAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })
+            : '';
+          return (
+            <div>
+              {createdTime && <p className="text-[10px] text-ink-faint leading-tight">{createdTime}</p>}
+              <p className="text-sm text-ink font-medium">{creatorName}</p>
+            </div>
+          );
+        }
+        return <span className="text-ink-muted text-sm">—</span>;
       },
     },
     { key: 'leadSource', label: 'Lead Source', className: 'hidden lg:table-cell',
