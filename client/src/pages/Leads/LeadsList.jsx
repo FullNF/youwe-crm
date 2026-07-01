@@ -107,16 +107,34 @@ export default function LeadsList() {
     {
       key: 'lastUpdatedBy', label: 'Updated By', className: 'hidden md:table-cell',
       render: (row) => {
-        if (!row.lastUpdatedBy) {
-          // Fallback for leads created before this field existed
-          return <span className="text-ink-muted text-sm">{row.leadManagedBy || '—'}</span>;
+        const raw = row.lastUpdatedBy || row.leadManagedBy || '';
+        if (!raw) return <span className="text-ink-muted text-sm">—</span>;
+
+        // Format: "Name · 30 Jun 3:45 PM"  (our new format)
+        // Legacy: just a plain name with no ·
+        const hasDot = raw.includes(' · ');
+        const name = hasDot ? raw.split(' · ')[0] : raw;
+        const timePart = hasDot ? raw.split(' · ')[1] : '';
+
+        // If the value is a raw ISO timestamp (old data or migration edge-case),
+        // convert it to a human-readable form instead of showing "2026-07-01T..."
+        let displayTime = timePart;
+        if (!hasDot && /^\d{4}-\d{2}-\d{2}T/.test(raw)) {
+          displayTime = new Date(raw).toLocaleString('en-IN', {
+            day: '2-digit', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true,
+          });
+          return (
+            <div>
+              <p className="text-[10px] text-ink-faint leading-tight">{displayTime}</p>
+              <p className="text-sm text-ink">—</p>
+            </div>
+          );
         }
-        const [name, ...timeParts] = row.lastUpdatedBy.split(' · ');
-        const time = timeParts.join(' · ');
+
         return (
           <div>
+            {displayTime && <p className="text-[10px] text-ink-faint leading-tight">{displayTime}</p>}
             <p className="text-sm text-ink">{name}</p>
-            {time && <p className="text-[10px] text-ink-faint leading-tight">{time}</p>}
           </div>
         );
       },

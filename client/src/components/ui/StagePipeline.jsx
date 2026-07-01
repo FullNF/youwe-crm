@@ -53,7 +53,7 @@ export default function StagePipeline({ stage, compact = false }) {
   if (compact) {
     // Compact (table row): dots + the current stage label as small text above
     return (
-      <div className="flex flex-col gap-0.5 items-start">
+      <div className="flex flex-col gap-0.5 items-center">
         <span className={`text-[10px] font-medium leading-none ${isWon ? 'text-success' : 'text-ink-muted'}`}>
           {isWon ? '🏆 ' : ''}{currentStage}
         </span>
